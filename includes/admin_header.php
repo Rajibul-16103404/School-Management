@@ -43,6 +43,11 @@ $active_dir = basename(dirname($_SERVER['SCRIPT_NAME']));
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSRF Token Definition -->
+    <script>
+        const CSRF_TOKEN = '<?php echo generate_csrf_token(); ?>';
+    </script>
 </head>
 <body>
 

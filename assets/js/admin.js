@@ -257,4 +257,38 @@ document.addEventListener('DOMContentLoaded', () => {
         setupImagePreviews();
     });
     observerPreview.observe(document.body, { childList: true, subtree: true });
+
+    // Auto-inject CSRF tokens into POST forms and state-changing links (delete links)
+    const injectCsrfTokens = () => {
+        if (typeof CSRF_TOKEN === 'undefined') return;
+        
+        // 1. Inject into POST forms
+        document.querySelectorAll('form[method="POST"], form[method="post"]').forEach(form => {
+            if (!form.querySelector('input[name="csrf_token"]')) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'csrf_token';
+                input.value = CSRF_TOKEN;
+                form.appendChild(input);
+            }
+        });
+        
+        // 2. Append token to any delete links (including standalone delete pages or state-changing action parameters)
+        document.querySelectorAll('a[href*="delete"]').forEach(link => {
+            let href = link.getAttribute('href');
+            if (href && !href.startsWith('javascript:') && !href.includes('csrf_token=')) {
+                const connector = href.includes('?') ? '&' : '?';
+                link.setAttribute('href', href + connector + 'csrf_token=' + CSRF_TOKEN);
+            }
+        });
+    };
+
+    // Run injection immediately
+    injectCsrfTokens();
+
+    // Re-run injection dynamically when the DOM changes (e.g. for dynamic or tabbed content)
+    const observerCsrf = new MutationObserver(() => {
+        injectCsrfTokens();
+    });
+    observerCsrf.observe(document.body, { childList: true, subtree: true });
 });

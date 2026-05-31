@@ -165,3 +165,91 @@ function upload_file(array $file, string $subfolder, array $allowed_extensions =
 function format_date(string $date): string {
     return date('d/m/Y', strtotime($date));
 }
+
+/**
+ * Generate CSRF token if not exists
+ */
+function generate_csrf_token(): string {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+/**
+ * Validate CSRF token
+ */
+function validate_csrf_token(?string $token): bool {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    $session_token = $_SESSION['csrf_token'] ?? '';
+    if (empty($session_token) || empty($token)) {
+        return false;
+    }
+    return hash_equals($session_token, $token);
+}
+
+/**
+ * Render CSRF hidden input field
+ */
+function csrf_input(): string {
+    return '<input type="hidden" name="csrf_token" value="' . escape(generate_csrf_token()) . '">';
+}
+
+/**
+ * Automatically check CSRF token for active POST requests or state-changing actions
+ */
+function verify_csrf() {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    
+    // Ignore verification on login page itself, or check it if we inject token
+    $current_script = basename($_SERVER['SCRIPT_NAME']);
+    if ($current_script === 'login.php' || $current_script === 'setup.php') {
+        return;
+    }
+
+    $is_delete_script = (strpos($current_script, 'delete') !== false);
+    $has_state_changing_param = false;
+    $state_changing_get_params = ['delete', 'delete_doc_id', 'delete_notice', 'delete_routine', 'delete_syllabus', 'delete_photo'];
+    foreach ($state_changing_get_params as $param) {
+        if (isset($_GET[$param])) {
+            $has_state_changing_param = true;
+            break;
+        }
+    }
+
+    // 1. Enforce token validation on standalone delete scripts or state-changing params
+    if ($is_delete_script || $has_state_changing_param) {
+        $token = $_POST['csrf_token'] ?? $_GET['csrf_token'] ?? '';
+        if (!validate_csrf_token($token)) {
+            $_SESSION['flash_error'] = 'নিরাপত্তা ত্রুটি: অবৈধ নিরাপত্তা টোকেন।';
+            
+            // Redirect back safely or fallback to dashboard
+            $redirect_url = $_SERVER['HTTP_REFERER'] ?? (defined('BASE_URL') ? BASE_URL . '/admin/index.php' : '/admin/index.php');
+            
+            // Prevent redirecting to the same delete URL or params to avoid infinite loop
+            if (strpos($redirect_url, 'delete') !== false) {
+                $redirect_url = defined('BASE_URL') ? BASE_URL . '/admin/index.php' : '/admin/index.php';
+            }
+            
+            header("Location: " . $redirect_url);
+            exit;
+        }
+    }
+
+    // 2. Enforce token validation on any other POST requests
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $token = $_POST['csrf_token'] ?? '';
+        if (!validate_csrf_token($token)) {
+            $_SESSION['flash_error'] = 'নিরাপত্তা ত্রুটি: CSRF টোকেন ভ্যালিডেশন ব্যর্থ হয়েছে।';
+            header("Location: " . $_SERVER['REQUEST_URI']);
+            exit;
+        }
+    }
+}

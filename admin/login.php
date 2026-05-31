@@ -19,54 +19,62 @@ $error_msg = null;
 $timeout = isset($_GET['timeout']) ? true : false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
-    $username = sanitize_input($_POST['username'] ?? '');
-    $password = $_POST['password'] ?? '';
-
-    if (empty($username) || empty($password)) {
-        $error_msg = "ইউজারনেম এবং পাসওয়ার্ড প্রদান করুন।";
+    $csrf_token = $_POST['csrf_token'] ?? '';
+    if (!validate_csrf_token($csrf_token)) {
+        $error_msg = "নিরাপত্তা ত্রুটি: অবৈধ নিরাপত্তা টোকেন।";
     } else {
-        try {
-            $stmt = $pdo->prepare("SELECT * FROM `users` WHERE `username` = ? LIMIT 1");
-            $stmt->execute([$username]);
-            $user = $stmt->fetch();
+        $username = sanitize_input($_POST['username'] ?? '');
+        $password = $_POST['password'] ?? '';
 
-            if ($user && password_verify($password, $user['password'])) {
-                // Set Session
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['user_role'] = $user['role'];
-                $_SESSION['user_name'] = $user['name_bn'];
-                $_SESSION['last_activity'] = time();
+        if (empty($username) || empty($password)) {
+            $error_msg = "ইউজারনেম এবং পাসওয়ার্ড প্রদান করুন।";
+        } else {
+            try {
+                $stmt = $pdo->prepare("SELECT * FROM `users` WHERE `username` = ? LIMIT 1");
+                $stmt->execute([$username]);
+                $user = $stmt->fetch();
 
-                // Remember Me cookie handling
-                if (isset($_POST['remember'])) {
-                    $token = bin2hex(random_bytes(32));
-                    // Update user's remember_token in the database
-                    $update_stmt = $pdo->prepare("UPDATE `users` SET `remember_token` = ? WHERE `id` = ?");
-                    $update_stmt->execute([$token, $user['id']]);
-                    
-                    // Set cookie for 30 days
-                    setcookie('remember_me', $user['id'] . ':' . $token, [
-                        'expires' => time() + 30 * 24 * 60 * 60, // 30 days
-                        'path' => '/',
-                        'secure' => isset($_SERVER['HTTPS']),
-                        'httponly' => true,
-                        'samesite' => 'Strict'
-                    ]);
+                if ($user && password_verify($password, $user['password'])) {
+                    // Regenerate session ID to prevent Session Fixation attacks
+                    session_regenerate_id(true);
+
+                    // Set Session
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['username'] = $user['username'];
+                    $_SESSION['user_role'] = $user['role'];
+                    $_SESSION['user_name'] = $user['name_bn'];
+                    $_SESSION['last_activity'] = time();
+
+                    // Remember Me cookie handling
+                    if (isset($_POST['remember'])) {
+                        $token = bin2hex(random_bytes(32));
+                        // Update user's remember_token in the database
+                        $update_stmt = $pdo->prepare("UPDATE `users` SET `remember_token` = ? WHERE `id` = ?");
+                        $update_stmt->execute([$token, $user['id']]);
+                        
+                        // Set cookie for 30 days
+                        setcookie('remember_me', $user['id'] . ':' . $token, [
+                            'expires' => time() + 30 * 24 * 60 * 60, // 30 days
+                            'path' => '/',
+                            'secure' => isset($_SERVER['HTTPS']),
+                            'httponly' => true,
+                            'samesite' => 'Strict'
+                        ]);
+                    }
+
+                    // Audit log entry
+                    log_activity($pdo, "Admin Login", "User '$username' successfully logged in.");
+
+                    header("Location: " . BASE_URL . "/admin/index.php");
+                    exit;
+                } else {
+                    $error_msg = "ভুল ইউজারনেম অথবা পাসওয়ার্ড!";
+                    // Log failed attempt
+                    log_activity($pdo, "Failed Login Attempt", "Username tried: '$username'");
                 }
-
-                // Audit log entry
-                log_activity($pdo, "Admin Login", "User '$username' successfully logged in.");
-
-                header("Location: " . BASE_URL . "/admin/index.php");
-                exit;
-            } else {
-                $error_msg = "ভুল ইউজারনেম অথবা পাসওয়ার্ড!";
-                // Log failed attempt
-                log_activity($pdo, "Failed Login Attempt", "Username tried: '$username'");
+            } catch (PDOException $e) {
+                $error_msg = "সার্ভার ত্রুটি: " . $e->getMessage();
             }
-        } catch (PDOException $e) {
-            $error_msg = "সার্ভার ত্রুটি: " . $e->getMessage();
         }
     }
 }
@@ -239,6 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         <?php endif; ?>
 
         <form method="POST">
+            <?php echo csrf_input(); ?>
             <div class="form-group">
                 <label for="username">ইউজারনেম (Username)</label>
                 <input type="text" id="username" name="username" class="form-control" placeholder="admin" required autocomplete="username">

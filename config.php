@@ -1,8 +1,16 @@
 <?php
 // Start output buffering to prevent "headers already sent" errors
 ob_start();
+
+// Send Security Headers to mitigate common web vulnerabilities
+header("X-Frame-Options: SAMEORIGIN");
+header("X-Content-Type-Options: nosniff");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+
 /**
  * Global Configuration File
+
  * School Management System
  */
 

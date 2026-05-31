@@ -126,6 +126,9 @@ function check_auth() {
         header("Location: " . BASE_URL . "/admin/login.php");
         exit;
     }
+    
+    // Auto-verify CSRF tokens on all authenticated admin page loads
+    verify_csrf();
 }
 
 /**
