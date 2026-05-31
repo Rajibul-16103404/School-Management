@@ -9,17 +9,59 @@ require_once __DIR__ . '/../config.php';
 // Manage Session Timeouts
 if (isset($_SESSION['user_id'])) {
     if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > SESSION_TIMEOUT_SECONDS)) {
-        // Destroy session on inactivity
-        $username = $_SESSION['username'] ?? 'User';
-        session_unset();
-        session_destroy();
-        
-        // Redirect to login page with timeout notice
-        header("Location: " . BASE_URL . "/admin/login.php?timeout=1");
-        exit;
+        $renewed = false;
+        if (isset($_COOKIE['remember_me'])) {
+            $parts = explode(':', $_COOKIE['remember_me'], 2);
+            if (count($parts) === 2) {
+                $user_id = (int)$parts[0];
+                $token = $parts[1];
+                
+                global $pdo;
+                $db = $pdo;
+                if (!$db) {
+                    try {
+                        $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
+                        $db = new PDO($dsn, DB_USER, DB_PASS, [
+                            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                            PDO::ATTR_EMULATE_PREPARES => false,
+                        ]);
+                    } catch (PDOException $e) {}
+                }
+                
+                if ($db) {
+                    try {
+                        $stmt = $db->prepare("SELECT * FROM `users` WHERE `id` = ? AND `remember_token` = ? LIMIT 1");
+                        $stmt->execute([$user_id, $token]);
+                        $user = $stmt->fetch();
+                        if ($user) {
+                            $_SESSION['last_activity'] = time();
+                            $renewed = true;
+                        }
+                    } catch (PDOException $e) {}
+                }
+            }
+        }
+
+        if (!$renewed) {
+            // Destroy session on inactivity
+            $username = $_SESSION['username'] ?? 'User';
+            session_unset();
+            session_destroy();
+            
+            // Clear cookie
+            if (isset($_COOKIE['remember_me'])) {
+                setcookie('remember_me', '', time() - 3600, '/');
+            }
+            
+            // Redirect to login page with timeout notice
+            header("Location: " . BASE_URL . "/admin/login.php?timeout=1");
+            exit;
+        }
+    } else {
+        // Update last active activity
+        $_SESSION['last_activity'] = time();
     }
-    // Update last active activity
-    $_SESSION['last_activity'] = time();
 }
 
 /**

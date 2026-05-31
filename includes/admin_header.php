@@ -91,6 +91,11 @@ $active_dir = basename(dirname($_SERVER['SCRIPT_NAME']));
                         <i class="fa-solid fa-book-open"></i> <span>পাঠদান ও নোটিশ</span>
                     </a>
                 </li>
+                <li class="<?php echo ($active_dir === 'gallery') ? 'active' : ''; ?>">
+                    <a href="<?php echo BASE_URL; ?>/admin/gallery">
+                        <i class="fa-solid fa-images"></i> <span>ফটো গ্যালারি</span>
+                    </a>
+                </li>
                 <li class="<?php echo ($active_dir === 'committee') ? 'active' : ''; ?>">
                     <a href="<?php echo BASE_URL; ?>/admin/committee">
                         <i class="fa-solid fa-users-gear"></i> <span>ব্যবস্থাপনা কমিটি</span>

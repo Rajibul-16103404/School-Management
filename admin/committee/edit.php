@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_member'])) {
             $photo_path = $member['photo']; // Keep original by default
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] !== UPLOAD_ERR_NO_FILE) {
                 try {
-                    $uploaded = upload_file($_FILES['photo'], 'photos', ['jpg', 'jpeg', 'png'], 2097152); // Max 2MB
+                    $uploaded = upload_file($_FILES['photo'], 'photos', ['jpg', 'jpeg', 'png'], 10485760);
                     
                     // Delete old photo if exists
                     if (!empty($member['photo']) && file_exists(UPLOAD_DIR . '/' . $member['photo'])) {
@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_member'])) {
                     </div>
                 <?php endif; ?>
                 <div style="flex:1;">
-                    <label for="photo">ছবি আপলোড (অনূর্ধ্ব ২ মেগাবাইট, JPG/PNG - পরিবর্তন করতে চাইলে)</label>
+                    <label for="photo">ছবি আপলোড (অনূর্ধ্ব ১০ মেগাবাইট, JPG/PNG - পরিবর্তন করতে চাইলে)</label>
                     <input type="file" id="photo" name="photo" class="form-control" accept="image/png, image/jpeg">
                 </div>
             </div>

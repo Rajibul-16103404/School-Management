@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_member'])) {
             $photo_path = null;
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] !== UPLOAD_ERR_NO_FILE) {
                 try {
-                    $photo_path = upload_file($_FILES['photo'], 'photos', ['jpg', 'jpeg', 'png'], 2097152); // Max 2MB
+                    $photo_path = upload_file($_FILES['photo'], 'photos', ['jpg', 'jpeg', 'png'], 10485760); // Max 10MB
                 } catch (Exception $e) {
                     $error = "ছবি আপলোড ত্রুটি: " . $e->getMessage();
                 }
@@ -216,7 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_member'])) {
             </div>
 
             <div class="admin-form-group form-group-full">
-                <label for="photo">শিক্ষক/কর্মচারীর ছবি (অনূর্ধ্ব ২ মেগাবাইট, JPG/PNG)</label>
+                <label for="photo">শিক্ষক/কর্মচারীর ছবি (অনূর্ধ্ব ১০ মেগাবাইট, JPG/PNG)</label>
                 <input type="file" id="photo" name="photo" class="form-control" accept="image/png, image/jpeg">
             </div>
         </div>

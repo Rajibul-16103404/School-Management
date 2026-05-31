@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_student'])) {
                 $photo_path = $student['photo']; // Keep original photo path by default
                 if (isset($_FILES['photo']) && $_FILES['photo']['error'] !== UPLOAD_ERR_NO_FILE) {
                     try {
-                        $uploaded = upload_file($_FILES['photo'], 'photos', ['jpg', 'jpeg', 'png'], 2097152);
+                        $uploaded = upload_file($_FILES['photo'], 'photos', ['jpg', 'jpeg', 'png'], 10485760);
                         
                         // Delete old photo if it exists
                         if (!empty($student['photo']) && file_exists(UPLOAD_DIR . '/' . $student['photo'])) {
@@ -208,7 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_student'])) {
                     </div>
                 <?php endif; ?>
                 <div style="flex:1;">
-                    <label for="photo">নতুন ছবি আপলোড (অনূর্ধ্ব ২ মেগাবাইট, JPG/PNG - পরিবর্তন করতে চাইলে)</label>
+                    <label for="photo">নতুন ছবি আপলোড (অনূর্ধ্ব ১০ মেগাবাইট, JPG/PNG - পরিবর্তন করতে চাইলে)</label>
                     <input type="file" id="photo" name="photo" class="form-control" accept="image/png, image/jpeg">
                 </div>
             </div>

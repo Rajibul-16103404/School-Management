@@ -26,11 +26,11 @@ if (session_status() == PHP_SESSION_NONE) {
     // 15 minutes session life time (900 seconds)
     ini_set('session.gc_maxlifetime', 900);
     session_set_cookie_params([
-        'lifetime' => 900,
+        'lifetime' => 0, // Expires on browser close
         'path' => '/',
         'secure' => isset($_SERVER['HTTPS']),
         'httponly' => true,
-        'samesite' => 'Strict'
+        'samesite' => 'Lax'
     ]);
     session_start();
 }

@@ -214,6 +214,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         existingPreview.remove();
                     }
                     
+                    // Hide existing server-side image if any in the same form-group
+                    const formGroup = input.closest('.admin-form-group');
+                    if (formGroup) {
+                        const existingImages = formGroup.querySelectorAll('img');
+                        existingImages.forEach(img => {
+                            if (!img.closest('.img-upload-preview-wrap')) {
+                                const container = img.closest('div');
+                                if (container && container !== input.parentNode) {
+                                    container.style.display = 'none';
+                                } else {
+                                    img.style.display = 'none';
+                                }
+                            }
+                        });
+                    }
+                    
                     if (file.type.startsWith('image/')) {
                         const previewUrl = URL.createObjectURL(file);
                         

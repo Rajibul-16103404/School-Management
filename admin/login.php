@@ -7,9 +7,10 @@
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/auth.php';
 
-// Redirect if already logged in
-if (isset($_SESSION['user_id'])) {
+// Redirect if already logged in or recognized via remember token
+if (is_logged_in()) {
     header("Location: " . BASE_URL . "/admin/index.php");
     exit;
 }
@@ -227,6 +228,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     </div>
     
     <div class="card-body">
+        <?php echo display_flash_alerts(); ?>
+
         <?php if ($error_msg): ?>
             <div class="alert alert-danger">⚠️ <?php echo $error_msg; ?></div>
         <?php endif; ?>
@@ -247,7 +250,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             </div>
 
             <div class="form-group" style="flex-direction: row; align-items: center; gap: 8px; margin-top: -10px; margin-bottom: 20px;">
-                <input type="checkbox" id="remember" name="remember" style="width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;">
+                <input type="checkbox" id="remember" name="remember" style="width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;" checked>
                 <label for="remember" style="font-weight: normal; cursor: pointer; font-size: 13px; color: var(--text-muted);">আমাকে মনে রাখুন (Remember Me)</label>
             </div>
             

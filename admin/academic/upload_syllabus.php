@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_syllabus'])) {
     } else {
         try {
             // Upload the file
-            $file_path = upload_file($_FILES['syllabus_file'], 'syllabi', ['pdf'], 5242880); // Limit to 5MB PDF
+            $file_path = upload_file($_FILES['syllabus_file'], 'syllabi', ['pdf'], 10485760); // Limit to 10MB PDF
 
             // Insert database
             $insert_stmt = $pdo->prepare("INSERT INTO `syllabi` (`class_id`, `subject_bn`, `subject_en`, `file_path`) VALUES (?, ?, ?, ?)");
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_syllabus'])) {
             </div>
 
             <div class="admin-form-group">
-                <label for="syllabus_file">সিলেবাস ফাইল (সর্বোচ্চ ৫ মেগাবাইট, শুধুমাত্র PDF) <span style="color:var(--danger);">*</span></label>
+                <label for="syllabus_file">সিলেবাস ফাইল (সর্বোচ্চ ১০ মেগাবাইট, শুধুমাত্র PDF) <span style="color:var(--danger);">*</span></label>
                 <input type="file" id="syllabus_file" name="syllabus_file" class="form-control" accept="application/pdf" required>
             </div>
         </div>

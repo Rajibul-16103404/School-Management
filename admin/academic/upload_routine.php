@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_routine'])) {
             $existing_routine = $stmt->fetch();
 
             // Upload the file
-            $file_path = upload_file($_FILES['routine_file'], 'routines', ['jpg', 'jpeg', 'png', 'pdf'], 5242880);
+            $file_path = upload_file($_FILES['routine_file'], 'routines', ['jpg', 'jpeg', 'png', 'pdf'], 10485760);
 
             if ($existing_routine) {
                 // Delete old file
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_routine'])) {
             </div>
 
             <div class="admin-form-group">
-                <label for="routine_file">রুটিন ফাইল নির্বাচন করুন (সর্বোচ্চ ৫ মেগাবাইট, PDF/JPG/PNG) <span style="color:var(--danger);">*</span></label>
+                <label for="routine_file">রুটিন ফাইল নির্বাচন করুন (সর্বোচ্চ ১০ মেগাবাইট, PDF/JPG/PNG) <span style="color:var(--danger);">*</span></label>
                 <input type="file" id="routine_file" name="routine_file" class="form-control" accept="image/png, image/jpeg, application/pdf" required>
             </div>
         </div>
