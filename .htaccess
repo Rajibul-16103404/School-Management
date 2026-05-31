@@ -1,0 +1,26 @@
+# Enable Rewriting Engine
+RewriteEngine On
+RewriteBase /
+
+# 1. External Redirect: Clean up URLs by redirecting index.php and *.php requests to clean URLs
+# Redirect /any/path/index.php to /any/path
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^/]+/)*index\.php\ HTTP/
+RewriteRule ^(([^/]+/)*)index\.php$ /$1 [R=301,L]
+
+# Redirect /any/path.php to /any/path
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /(([^/]+/)*[^/.]+)\.php\ HTTP/
+RewriteRule ^(([^/]+/)*[^/.]+)\.php$ /$1 [R=301,L]
+
+# 2. Internal Rewrite Rules: Map clean URLs back to PHP files behind the scenes
+# If the request is an existing physical file or directory, serve it directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# If the request is a directory and has an index.php, serve that index.php
+RewriteCond %{DOCUMENT_ROOT}/$1/index.php -f
+RewriteRule ^(.*)/?$ $1/index.php [L]
+
+# If the request matches a PHP file, append .php and execute it
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^(.*)/?$ $1.php [L]

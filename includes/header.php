@@ -55,9 +55,9 @@ $sch_email = $school['email'] ?? 'info@school.gov.bd';
         </div>
         <div>
             <?php if (is_logged_in()): ?>
-                <a href="<?php echo BASE_URL; ?>/admin/index.php" class="top-bar-btn"><i class="fa fa-dashboard"></i> ড্যাশবোর্ড</a>
+                <a href="<?php echo BASE_URL; ?>/admin" class="top-bar-btn"><i class="fa fa-dashboard"></i> ড্যাশবোর্ড</a>
             <?php else: ?>
-                <a href="<?php echo BASE_URL; ?>/admin/login.php" class="top-bar-btn"><i class="fa fa-lock"></i> লগইন</a>
+                <a href="<?php echo BASE_URL; ?>/admin/login" class="top-bar-btn"><i class="fa fa-lock"></i> লগইন</a>
             <?php endif; ?>
         </div>
     </div>
@@ -87,16 +87,16 @@ $sch_email = $school['email'] ?? 'info@school.gov.bd';
 <nav class="main-nav">
     <div class="container">
         <ul class="nav-list">
-            <li><a href="<?php echo BASE_URL; ?>/index.php"><i class="fa fa-home"></i> হোম</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/profile.php">পরিচিতি</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/recognition.php">অনুমতি ও স্বীকৃতি</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/students.php">শিক্ষার্থীর তথ্য</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/sections.php">অনুমোদিত শাখা</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/academics.php">পাঠদান তথ্য</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/mpo.php">এমপিও ও জাতীয়করণ</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/teachers.php">শিক্ষক-কর্মচারী</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/committee.php">ব্যবস্থাপনা কমিটি</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/contact.php">যোগাযোগ</a></li>
+            <li><a href="<?php echo BASE_URL; ?>/"><i class="fa fa-home"></i> হোম</a></li>
+            <li><a href="<?php echo BASE_URL; ?>/profile">পরিচিতি</a></li>
+            <li><a href="<?php echo BASE_URL; ?>/recognition">অনুমতি ও স্বীকৃতি</a></li>
+            <li><a href="<?php echo BASE_URL; ?>/students">শিক্ষার্থীর তথ্য</a></li>
+            <li><a href="<?php echo BASE_URL; ?>/sections">অনুমোদিত শাখা</a></li>
+            <li><a href="<?php echo BASE_URL; ?>/academics">পাঠদান তথ্য</a></li>
+            <li><a href="<?php echo BASE_URL; ?>/mpo">এমপিও ও জাতীয়করণ</a></li>
+            <li><a href="<?php echo BASE_URL; ?>/teachers">শিক্ষক-কর্মচারী</a></li>
+            <li><a href="<?php echo BASE_URL; ?>/committee">ব্যবস্থাপনা কমিটি</a></li>
+            <li><a href="<?php echo BASE_URL; ?>/contact">যোগাযোগ</a></li>
         </ul>
     </div>
 </nav>
