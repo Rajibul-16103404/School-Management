@@ -11,7 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sidebarToggle && sidebar) {
         sidebarToggle.addEventListener('click', (e) => {
             e.stopPropagation();
-            sidebar.classList.toggle('show');
+            if (window.innerWidth <= 992) {
+                sidebar.classList.toggle('show');
+            } else {
+                sidebar.classList.toggle('collapsed');
+            }
         });
         
         // Close sidebar on tapping outer area in mobile
