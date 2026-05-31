@@ -26,7 +26,53 @@ if (isset($_SESSION['user_id'])) {
  * Check if user is logged in
  */
 function is_logged_in(): bool {
-    return isset($_SESSION['user_id']);
+    if (isset($_SESSION['user_id'])) {
+        return true;
+    }
+    
+    // Check if remember_me cookie is set for device recognition
+    if (isset($_COOKIE['remember_me'])) {
+        global $pdo;
+        $db = $pdo;
+        if (!$db) {
+            try {
+                $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
+                $db = new PDO($dsn, DB_USER, DB_PASS, [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                ]);
+            } catch (PDOException $e) {
+                return false;
+            }
+        }
+        
+        $parts = explode(':', $_COOKIE['remember_me'], 2);
+        if (count($parts) === 2) {
+            $user_id = (int)$parts[0];
+            $token = $parts[1];
+            
+            try {
+                $stmt = $db->prepare("SELECT * FROM `users` WHERE `id` = ? AND `remember_token` = ? LIMIT 1");
+                $stmt->execute([$user_id, $token]);
+                $user = $stmt->fetch();
+                
+                if ($user) {
+                    // Auto-renew session details
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['username'] = $user['username'];
+                    $_SESSION['user_role'] = $user['role'];
+                    $_SESSION['user_name'] = $user['name_bn'];
+                    $_SESSION['last_activity'] = time();
+                    return true;
+                }
+            } catch (PDOException $e) {
+                return false;
+            }
+        }
+    }
+    
+    return false;
 }
 
 /**

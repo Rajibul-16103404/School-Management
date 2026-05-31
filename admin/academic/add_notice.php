@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_notice'])) {
             $attachment_path = null;
             if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] !== UPLOAD_ERR_NO_FILE) {
                 try {
-                    $attachment_path = upload_file($_FILES['attachment'], 'notices', ['jpg', 'jpeg', 'png', 'pdf'], 5242880); // Max 5MB
+                    $attachment_path = upload_file($_FILES['attachment'], 'notices', ['jpg', 'jpeg', 'png', 'pdf'], 10485760); // Max 10MB
                 } catch (Exception $e) {
                     $error = "সংযুক্তি ফাইল আপলোড ত্রুটি: " . $e->getMessage();
                 }
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_notice'])) {
             </div>
 
             <div class="admin-form-group form-group-full">
-                <label for="attachment">সংযুক্ত ফাইল (ঐচ্ছিক, সর্বোচ্চ ৫ মেগাবাইট, PDF/JPG/PNG)</label>
+                <label for="attachment">সংযুক্ত ফাইল (ঐচ্ছিক, সর্বোচ্চ ১০ মেগাবাইট, PDF/JPG/PNG)</label>
                 <input type="file" id="attachment" name="attachment" class="form-control" accept="image/png, image/jpeg, application/pdf">
             </div>
         </div>

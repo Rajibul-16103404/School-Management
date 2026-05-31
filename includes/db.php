@@ -15,6 +15,24 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
+
+    // Auto-migration: Ensure gallery column exists in schools table
+    try {
+        $pdo->query("SELECT `gallery` FROM `schools` LIMIT 1");
+    } catch (PDOException $ex) {
+        try {
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `gallery` TEXT NULL AFTER `map_embed`");
+        } catch (PDOException $alterEx) {}
+    }
+
+    // Auto-migration: Ensure remember_token column exists in users table
+    try {
+        $pdo->query("SELECT `remember_token` FROM `users` LIMIT 1");
+    } catch (PDOException $ex) {
+        try {
+            $pdo->exec("ALTER TABLE `users` ADD COLUMN `remember_token` VARCHAR(255) NULL AFTER `email`");
+        } catch (PDOException $alterEx) {}
+    }
 } catch (PDOException $e) {
     // If database connection fails and we are not in setup.php, output warning
     $currentScript = basename($_SERVER['SCRIPT_NAME']);

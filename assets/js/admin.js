@@ -195,4 +195,50 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         observer.observe(document.body, { childList: true, subtree: true });
     }
+
+    // Dynamic Image Upload Preview
+    const setupImagePreviews = () => {
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+        fileInputs.forEach(input => {
+            if (input.dataset.previewBound) return;
+            input.dataset.previewBound = "true";
+            
+            input.addEventListener('change', () => {
+                const files = input.files;
+                if (files && files.length > 0) {
+                    const file = files[0];
+                    
+                    // Remove existing preview if any
+                    const existingPreview = input.parentNode.querySelector('.img-upload-preview-wrap');
+                    if (existingPreview) {
+                        existingPreview.remove();
+                    }
+                    
+                    if (file.type.startsWith('image/')) {
+                        const previewUrl = URL.createObjectURL(file);
+                        
+                        const previewWrap = document.createElement('div');
+                        previewWrap.className = 'img-upload-preview-wrap';
+                        previewWrap.style.cssText = 'margin-top: 10px; border: 1px dashed var(--border-color); padding: 5px; border-radius: 8px; max-width: 150px; background: white; display: flex; align-items: center; justify-content: center; height: 150px;';
+                        
+                        const img = document.createElement('img');
+                        img.src = previewUrl;
+                        img.style.cssText = 'max-width: 100%; max-height: 100%; object-fit: contain;';
+                        
+                        previewWrap.appendChild(img);
+                        input.parentNode.appendChild(previewWrap);
+                    }
+                }
+            });
+        });
+    };
+
+    // Run previewer initialization
+    setupImagePreviews();
+
+    // Re-initialize preview bindings dynamically
+    const observerPreview = new MutationObserver(() => {
+        setupImagePreviews();
+    });
+    observerPreview.observe(document.body, { childList: true, subtree: true });
 });

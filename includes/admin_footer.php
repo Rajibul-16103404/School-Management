@@ -8,7 +8,7 @@
         
         <footer class="admin-footer">
             <p>&copy; <?php echo date('Y'); ?> সোনারগাঁও উচ্চ বিদ্যালয় | অ্যাডমিন প্যানেল v1.0.0</p>
-            <p>Developed with <i class="fa fa-heart" style="color: #ef4444;"></i> by Antigravity AI</p>
+            <p>কারিগরি সহায়তায়: <a href="https://softinglobal.com" target="_blank" style="color: var(--accent); font-weight: bold; text-decoration: none;">Softin Global</a></p>
         </footer>
     </div> <!-- Close admin-main -->
 </div> <!-- Close admin-wrapper -->

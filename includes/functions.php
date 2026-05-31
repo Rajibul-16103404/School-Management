@@ -87,7 +87,7 @@ function display_flash_alerts(): string {
  * @return string Uploaded file name on success
  * @throws Exception on upload failure
  */
-function upload_file(array $file, string $subfolder, array $allowed_extensions = ['jpg', 'jpeg', 'png', 'pdf'], int $max_size = 5242880): string {
+function upload_file(array $file, string $subfolder, array $allowed_extensions = ['jpg', 'jpeg', 'png', 'pdf'], int $max_size = 10485760): string {
     if (!isset($file['error']) || is_array($file['error'])) {
         throw new Exception('Invalid upload parameter schema.');
     }

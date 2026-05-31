@@ -53,13 +53,6 @@ $sch_email = $school['email'] ?? 'info@school.gov.bd';
             <span><i class="fa fa-info-circle"></i> ইআইআইএন (EIIN): <strong><?php echo escape($sch_eiin); ?></strong></span>
             <span class="desktop-only" style="margin-left: 20px;"><i class="fa fa-phone"></i> <?php echo escape($sch_phone); ?></span>
         </div>
-        <div>
-            <?php if (is_logged_in()): ?>
-                <a href="<?php echo BASE_URL; ?>/admin" class="top-bar-btn"><i class="fa fa-dashboard"></i> ড্যাশবোর্ড</a>
-            <?php else: ?>
-                <a href="<?php echo BASE_URL; ?>/admin/login" class="top-bar-btn"><i class="fa fa-lock"></i> লগইন</a>
-            <?php endif; ?>
-        </div>
     </div>
 </div>
 

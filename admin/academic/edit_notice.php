@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_notice'])) {
             $attachment_path = $notice['attachment']; // Keep original by default
             if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] !== UPLOAD_ERR_NO_FILE) {
                 try {
-                    $uploaded = upload_file($_FILES['attachment'], 'notices', ['jpg', 'jpeg', 'png', 'pdf'], 5242880);
+                    $uploaded = upload_file($_FILES['attachment'], 'notices', ['jpg', 'jpeg', 'png', 'pdf'], 10485760);
                     
                     // Delete old file if exists
                     if (!empty($notice['attachment']) && file_exists(UPLOAD_DIR . '/' . $notice['attachment'])) {
@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_notice'])) {
                     </div>
                 <?php endif; ?>
                 <div style="flex:1;">
-                    <label for="attachment">নতুন ফাইল সংযুক্ত করুন (সর্বোচ্চ ৫ মেগাবাইট, PDF/JPG/PNG - পরিবর্তন করতে চাইলে)</label>
+                    <label for="attachment">নতুন ফাইল সংযুক্ত করুন (সর্বোচ্চ ১০ মেগাবাইট, PDF/JPG/PNG - পরিবর্তন করতে চাইলে)</label>
                     <input type="file" id="attachment" name="attachment" class="form-control" accept="image/png, image/jpeg, application/pdf">
                 </div>
             </div>

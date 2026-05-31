@@ -37,6 +37,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                 $_SESSION['user_name'] = $user['name_bn'];
                 $_SESSION['last_activity'] = time();
 
+                // Remember Me cookie handling
+                if (isset($_POST['remember'])) {
+                    $token = bin2hex(random_bytes(32));
+                    // Update user's remember_token in the database
+                    $update_stmt = $pdo->prepare("UPDATE `users` SET `remember_token` = ? WHERE `id` = ?");
+                    $update_stmt->execute([$token, $user['id']]);
+                    
+                    // Set cookie for 30 days
+                    setcookie('remember_me', $user['id'] . ':' . $token, [
+                        'expires' => time() + 30 * 24 * 60 * 60, // 30 days
+                        'path' => '/',
+                        'secure' => isset($_SERVER['HTTPS']),
+                        'httponly' => true,
+                        'samesite' => 'Strict'
+                    ]);
+                }
+
                 // Audit log entry
                 log_activity($pdo, "Admin Login", "User '$username' successfully logged in.");
 
@@ -227,6 +244,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             <div class="form-group">
                 <label for="password">পাসওয়ার্ড (Password)</label>
                 <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+            </div>
+
+            <div class="form-group" style="flex-direction: row; align-items: center; gap: 8px; margin-top: -10px; margin-bottom: 20px;">
+                <input type="checkbox" id="remember" name="remember" style="width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;">
+                <label for="remember" style="font-weight: normal; cursor: pointer; font-size: 13px; color: var(--text-muted);">আমাকে মনে রাখুন (Remember Me)</label>
             </div>
             
             <button type="submit" name="login" class="btn-login">লগইন করুন</button>
