@@ -33,6 +33,43 @@ try {
             $pdo->exec("ALTER TABLE `users` ADD COLUMN `remember_token` VARCHAR(255) NULL AFTER `email`");
         } catch (PDOException $alterEx) {}
     }
+
+    // Auto-migration: Ensure menus table exists and is seeded
+    try {
+        $pdo->query("SELECT 1 FROM `menus` LIMIT 1");
+    } catch (PDOException $ex) {
+        try {
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS `menus` (
+                  `id` INT AUTO_INCREMENT PRIMARY KEY,
+                  `title_bn` VARCHAR(100) NOT NULL,
+                  `title_en` VARCHAR(100) NOT NULL,
+                  `url` VARCHAR(255) NOT NULL,
+                  `parent_id` INT NULL,
+                  `sort_order` INT DEFAULT 0,
+                  FOREIGN KEY (`parent_id`) REFERENCES `menus`(`id`) ON DELETE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+            ");
+            
+            // Seed initial menus
+            $pdo->exec("
+                INSERT INTO `menus` (`id`, `title_bn`, `title_en`, `url`, `parent_id`, `sort_order`) VALUES
+                (1, 'হোম', 'Home', '/', NULL, 1),
+                (2, 'আমাদের সম্পর্কে', 'About Us', '#', NULL, 2),
+                (3, 'পরিচিতি', 'Profile', '/profile', 2, 1),
+                (4, 'অনুমতি ও স্বীকৃতি', 'Recognition', '/recognition', 2, 2),
+                (5, 'একাডেমিক', 'Academics', '#', NULL, 3),
+                (6, 'শিক্ষার্থীর তথ্য', 'Students Info', '/students', 5, 1),
+                (7, 'অনুমোদিত শাখা', 'Approved Sections', '/sections', 5, 2),
+                (8, 'পাঠদান তথ্য', 'Academics Info', '/academics', 5, 3),
+                (9, 'জনবল', 'Personnel', '#', NULL, 4),
+                (10, 'শিক্ষক-কর্মচারী', 'Teachers & Staff', '/teachers', 9, 1),
+                (11, 'ব্যবস্থাপনা কমিটি', 'Management Committee', '/committee', 9, 2),
+                (12, 'এমপিও ও জাতীয়করণ', 'MPO & Nationalization', '/mpo', NULL, 5),
+                (13, 'যোগাযোগ', 'Contact', '/contact', NULL, 6)
+            ");
+        } catch (PDOException $createEx) {}
+    }
 } catch (PDOException $e) {
     // If database connection fails and we are not in setup.php, output warning
     $currentScript = basename($_SERVER['SCRIPT_NAME']);

@@ -2,6 +2,7 @@
 -- Conforming to DSHE regulations in Bangladesh
 
 SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `menus`;
 DROP TABLE IF EXISTS `activity_logs`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `recognition_docs`;
@@ -306,3 +307,30 @@ INSERT INTO `committee_members` (`id`, `name_bn`, `name_en`, `designation_bn`, `
 (18, 'মোসাম্মাৎ শাহিদা আক্তার', 'Mst. Shahida Akter', 'সমাজসেবক সদস্য', 'Social Worker', 'সমাজসেবা', 'Social Work', '01712000018', 'photos/committee_18.png', '2025', '2027', 18),
 (19, 'মোঃ রফিক উদ্দিন', 'Md. Rafique Uddin', 'শিক্ষানুরাগী সদস্য', 'Educationist Member', 'অবসরপ্রাপ্ত শিক্ষক', 'Retired Teacher', '01712000019', 'photos/committee_19.png', '2025', '2027', 19),
 (20, 'মোঃ আসাদুজ্জামান', 'Md. Asaduzzaman', 'প্রতিষ্ঠাতা সদস্য', 'Founder Member', 'ব্যবসায়ী', 'Businessman', '01712000020', 'photos/committee_20.png', '2025', '2027', 20);
+
+-- Seed Navigation Menus
+CREATE TABLE IF NOT EXISTS `menus` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `title_bn` VARCHAR(100) NOT NULL,
+  `title_en` VARCHAR(100) NOT NULL,
+  `url` VARCHAR(255) NOT NULL,
+  `parent_id` INT NULL,
+  `sort_order` INT DEFAULT 0,
+  FOREIGN KEY (`parent_id`) REFERENCES `menus`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `menus` (`id`, `title_bn`, `title_en`, `url`, `parent_id`, `sort_order`) VALUES
+(1, 'হোম', 'Home', '/', NULL, 1),
+(2, 'আমাদের সম্পর্কে', 'About Us', '#', NULL, 2),
+(3, 'পরিচিতি', 'Profile', '/profile', 2, 1),
+(4, 'অনুমতি ও স্বীকৃতি', 'Recognition', '/recognition', 2, 2),
+(5, 'একাডেমিক', 'Academics', '#', NULL, 3),
+(6, 'শিক্ষার্থীর তথ্য', 'Students Info', '/students', 5, 1),
+(7, 'অনুমোদিত শাখা', 'Approved Sections', '/sections', 5, 2),
+(8, 'পাঠদান তথ্য', 'Academics Info', '/academics', 5, 3),
+(9, 'জনবল', 'Personnel', '#', NULL, 4),
+(10, 'শিক্ষক-কর্মচারী', 'Teachers & Staff', '/teachers', 9, 1),
+(11, 'ব্যবস্থাপনা কমিটি', 'Management Committee', '/committee', 9, 2),
+(12, 'এমপিও ও জাতীয়করণ', 'MPO & Nationalization', '/mpo', NULL, 5),
+(13, 'যোগাযোগ', 'Contact', '/contact', NULL, 6);
+

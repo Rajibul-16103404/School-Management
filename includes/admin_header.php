@@ -109,6 +109,11 @@ $active_dir = basename(dirname($_SERVER['SCRIPT_NAME']));
                 
                 <!-- Superadmin & Headteacher only access -->
                 <?php if ($user_role === 'superadmin' || $user_role === 'headteacher'): ?>
+                    <li class="<?php echo ($active_dir === 'menu') ? 'active' : ''; ?>">
+                        <a href="<?php echo BASE_URL; ?>/admin/menu">
+                            <i class="fa-solid fa-compass"></i> <span>ন্যাভিগেশন মেনু</span>
+                        </a>
+                    </li>
                     <li class="<?php echo ($active_dir === 'settings') ? 'active' : ''; ?>">
                         <a href="<?php echo BASE_URL; ?>/admin/settings">
                             <i class="fa-solid fa-gears"></i> <span>প্রতিষ্ঠান পরিচিতি</span>

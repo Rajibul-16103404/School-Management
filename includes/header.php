@@ -76,39 +76,99 @@ $sch_email = $school['email'] ?? 'info@school.gov.bd';
     </div>
 </header>
 
+<?php
+// Fetch menus from database
+$menu_tree = [];
+if ($pdo) {
+    try {
+        $stmt = $pdo->query("SELECT * FROM `menus` ORDER BY `sort_order` ASC");
+        $all_menus = $stmt->fetchAll();
+        
+        $root_menus = [];
+        $sub_menus = [];
+        
+        foreach ($all_menus as $m) {
+            if ($m['parent_id'] === null) {
+                $root_menus[] = $m;
+            } else {
+                $sub_menus[$m['parent_id']][] = $m;
+            }
+        }
+        
+        $menu_tree = [
+            'roots' => $root_menus,
+            'subs' => $sub_menus
+        ];
+    } catch (PDOException $e) {
+        // Fallback to static
+    }
+}
+
+// Fallbacks
+if (empty($menu_tree)) {
+    $menu_tree = [
+        'roots' => [
+            ['id' => 1, 'title_bn' => 'হোম', 'title_en' => 'Home', 'url' => '/'],
+            ['id' => 2, 'title_bn' => 'আমাদের সম্পর্কে', 'title_en' => 'About Us', 'url' => '#'],
+            ['id' => 5, 'title_bn' => 'একাডেমিক', 'title_en' => 'Academics', 'url' => '#'],
+            ['id' => 9, 'title_bn' => 'জনবল', 'title_en' => 'Personnel', 'url' => '#'],
+            ['id' => 12, 'title_bn' => 'এমপিও ও জাতীয়করণ', 'title_en' => 'MPO & Nationalization', 'url' => '/mpo'],
+            ['id' => 13, 'title_bn' => 'যোগাযোগ', 'title_en' => 'Contact', 'url' => '/contact']
+        ],
+        'subs' => [
+            2 => [
+                ['title_bn' => 'পরিচিতি', 'title_en' => 'Profile', 'url' => '/profile'],
+                ['title_bn' => 'অনুমতি ও স্বীকৃতি', 'title_en' => 'Recognition', 'url' => '/recognition']
+            ],
+            5 => [
+                ['title_bn' => 'শিক্ষার্থীর তথ্য', 'title_en' => 'Students Info', 'url' => '/students'],
+                ['title_bn' => 'অনুমোদিত শাখা', 'title_en' => 'Approved Sections', 'url' => '/sections'],
+                ['title_bn' => 'পাঠদান তথ্য', 'title_en' => 'Academics Info', 'url' => '/academics']
+            ],
+            9 => [
+                ['title_bn' => 'শিক্ষক-কর্মচারী', 'title_en' => 'Teachers & Staff', 'url' => '/teachers'],
+                ['title_bn' => 'ব্যবস্থাপনা কমিটি', 'title_en' => 'Management Committee', 'url' => '/committee']
+            ]
+        ]
+    ];
+}
+?>
+
 <!-- Navigation Menu -->
 <nav class="main-nav">
     <div class="container">
         <ul class="nav-list">
-            <li><a href="<?php echo BASE_URL; ?>/"><i class="fa fa-home"></i> হোম</a></li>
-            
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle">আমাদের সম্পর্কে <i class="fa fa-chevron-down" style="font-size: 11px; margin-left: 4px;"></i></a>
-                <ul class="dropdown-menu">
-                    <li><a href="<?php echo BASE_URL; ?>/profile">পরিচিতি</a></li>
-                    <li><a href="<?php echo BASE_URL; ?>/recognition">অনুমতি ও স্বীকৃতি</a></li>
-                </ul>
-            </li>
-            
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle">একাডেমিক <i class="fa fa-chevron-down" style="font-size: 11px; margin-left: 4px;"></i></a>
-                <ul class="dropdown-menu">
-                    <li><a href="<?php echo BASE_URL; ?>/students">শিক্ষার্থীর তথ্য</a></li>
-                    <li><a href="<?php echo BASE_URL; ?>/sections">অনুমোদিত শাখা</a></li>
-                    <li><a href="<?php echo BASE_URL; ?>/academics">পাঠদান তথ্য</a></li>
-                </ul>
-            </li>
-            
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle">জনবল <i class="fa fa-chevron-down" style="font-size: 11px; margin-left: 4px;"></i></a>
-                <ul class="dropdown-menu">
-                    <li><a href="<?php echo BASE_URL; ?>/teachers">শিক্ষক-কর্মচারী</a></li>
-                    <li><a href="<?php echo BASE_URL; ?>/committee">ব্যবস্থাপনা কমিটি</a></li>
-                </ul>
-            </li>
-            
-            <li><a href="<?php echo BASE_URL; ?>/mpo">এমপিও ও জাতীয়করণ</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/contact">যোগাযোগ</a></li>
+            <?php foreach ($menu_tree['roots'] as $root): 
+                $has_sub = isset($menu_tree['subs'][$root['id']]) && count($menu_tree['subs'][$root['id']]) > 0;
+                $url = $root['url'];
+                
+                if ($url !== '#' && !str_starts_with($url, 'http') && !str_starts_with($url, 'mailto:')) {
+                    $url = BASE_URL . $url;
+                }
+            ?>
+                <?php if ($has_sub): ?>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle"><?php echo escape($root['title_bn']); ?> <i class="fa fa-chevron-down" style="font-size: 11px; margin-left: 4px;"></i></a>
+                        <ul class="dropdown-menu">
+                            <?php foreach ($menu_tree['subs'][$root['id']] as $sub): 
+                                $sub_url = $sub['url'];
+                                if ($sub_url !== '#' && !str_starts_with($sub_url, 'http') && !str_starts_with($sub_url, 'mailto:')) {
+                                    $sub_url = BASE_URL . $sub_url;
+                                }
+                            ?>
+                                <li><a href="<?php echo $sub_url; ?>"><?php echo escape($sub['title_bn']); ?></a></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </li>
+                <?php else: ?>
+                    <li>
+                        <a href="<?php echo $url; ?>">
+                            <?php if ($root['id'] == 1 || $root['url'] === '/'): ?><i class="fa fa-home"></i> <?php endif; ?>
+                            <?php echo escape($root['title_bn']); ?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </ul>
     </div>
 </nav>
