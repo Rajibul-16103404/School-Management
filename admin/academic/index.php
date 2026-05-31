@@ -47,9 +47,9 @@ try {
 <div class="page-title">
     <span><i class="fa-solid fa-book-open"></i> পাঠদান ও নোটিশ ব্যবস্থাপনা</span>
     <div style="display:flex; gap:10px;">
-        <a href="upload_syllabus.php" class="btn-admin btn-secondary" style="background-color: var(--info);"><i class="fa fa-book"></i> সিলেবাস আপলোড</a>
-        <a href="upload_routine.php" class="btn-admin btn-accent"><i class="fa fa-calendar-plus"></i> রুটিন আপলোড</a>
-        <a href="add_notice.php" class="btn-admin btn-primary"><i class="fa fa-plus-circle"></i> নতুন নোটিশ</a>
+        <a href="<?php echo BASE_URL; ?>/admin/academic/upload_syllabus" class="btn-admin btn-secondary" style="background-color: var(--info);"><i class="fa fa-book"></i> সিলেবাস আপলোড</a>
+        <a href="<?php echo BASE_URL; ?>/admin/academic/upload_routine" class="btn-admin btn-accent"><i class="fa fa-calendar-plus"></i> রুটিন আপলোড</a>
+        <a href="<?php echo BASE_URL; ?>/admin/academic/add_notice" class="btn-admin btn-primary"><i class="fa fa-plus-circle"></i> নতুন নোটিশ</a>
     </div>
 </div>
 
@@ -89,8 +89,8 @@ try {
                                     <?php endif; ?>
                                 </td>
                                 <td class="actions-cell">
-                                    <a href="edit_notice.php?id=<?php echo $notice['id']; ?>" class="btn-action edit" title="সম্পাদনা"><i class="fa fa-edit"></i></a>
-                                    <a href="delete_notice.php?id=<?php echo $notice['id']; ?>" class="btn-action delete" title="মুছে ফেলুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই নোটিশটি মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
+                                    <a href="<?php echo BASE_URL; ?>/admin/academic/edit_notice?id=<?php echo $notice['id']; ?>" class="btn-action edit" title="সম্পাদনা"><i class="fa fa-edit"></i></a>
+                                    <a href="<?php echo BASE_URL; ?>/admin/academic/delete_notice?id=<?php echo $notice['id']; ?>" class="btn-action delete" title="মুছে ফেলুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই নোটিশটি মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -137,7 +137,7 @@ try {
                                     </td>
                                     <td class="actions-cell">
                                         <?php if (isset($routines[$cls['id']])): ?>
-                                            <a href="delete_routine.php?id=<?php echo $routines[$cls['id']]['id']; ?>" class="btn-action delete" title="রুটিন মুছুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই রুটিনটি মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
+                                            <a href="<?php echo BASE_URL; ?>/admin/academic/delete_routine?id=<?php echo $routines[$cls['id']]['id']; ?>" class="btn-action delete" title="রুটিন মুছুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই রুটিনটি মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
                                         <?php else: ?>
                                             <span style="color: var(--text-muted); font-size:12px;">-</span>
                                         <?php endif; ?>
@@ -178,7 +178,7 @@ try {
                                         </a>
                                     </td>
                                     <td class="actions-cell">
-                                        <a href="delete_syllabus.php?id=<?php echo $sy['id']; ?>" class="btn-action delete" title="সিলেবাস মুছুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই সিলেবাসটি মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
+                                        <a href="<?php echo BASE_URL; ?>/admin/academic/delete_syllabus?id=<?php echo $sy['id']; ?>" class="btn-action delete" title="সিলেবাস মুছুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই সিলেবাসটি মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

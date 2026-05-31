@@ -31,8 +31,8 @@ try {
 <div class="page-title">
     <span><i class="fa-solid fa-school"></i> শ্রেণি ও শাখা ব্যবস্থাপনা (Classes & Sections)</span>
     <div style="display:flex; gap:10px;">
-        <a href="add_section.php" class="btn-admin btn-accent"><i class="fa fa-plus-circle"></i> নতুন শাখা যুক্ত করুন</a>
-        <a href="add_class.php" class="btn-admin btn-primary"><i class="fa fa-circle-plus"></i> নতুন শ্রেণি যুক্ত করুন</a>
+        <a href="<?php echo BASE_URL; ?>/admin/classes/add_section" class="btn-admin btn-accent"><i class="fa fa-plus-circle"></i> নতুন শাখা যুক্ত করুন</a>
+        <a href="<?php echo BASE_URL; ?>/admin/classes/add_class" class="btn-admin btn-primary"><i class="fa fa-circle-plus"></i> নতুন শ্রেণি যুক্ত করুন</a>
     </div>
 </div>
 
@@ -52,8 +52,8 @@ try {
                     </div>
                     
                     <div style="display:flex; gap:8px;">
-                        <a href="edit_class.php?id=<?php echo $cls['id']; ?>" class="btn-admin btn-secondary" style="font-size:12px; padding:6px 12px;"><i class="fa fa-edit"></i> সম্পাদনা</a>
-                        <a href="delete_class.php?id=<?php echo $cls['id']; ?>" class="btn-admin btn-danger" style="font-size:12px; padding:6px 12px;" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই শ্রেণিটি মুছে ফেলতে চান? এর অধীনে থাকা সকল শাখা এবং শিক্ষার্থীর বিবরণ মুছে যাবে!');"><i class="fa fa-trash"></i> মুছে ফেলুন</a>
+                        <a href="<?php echo BASE_URL; ?>/admin/classes/edit_class?id=<?php echo $cls['id']; ?>" class="btn-admin btn-secondary" style="font-size:12px; padding:6px 12px;"><i class="fa fa-edit"></i> সম্পাদনা</a>
+                        <a href="<?php echo BASE_URL; ?>/admin/classes/delete_class?id=<?php echo $cls['id']; ?>" class="btn-admin btn-danger" style="font-size:12px; padding:6px 12px;" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই শ্রেণিটি মুছে ফেলতে চান? এর অধীনে থাকা সকল শাখা এবং শিক্ষার্থীর বিবরণ মুছে যাবে!');"><i class="fa fa-trash"></i> মুছে ফেলুন</a>
                     </div>
                 </div>
                 
@@ -82,8 +82,8 @@ try {
                                         <td><span class="badge badge-success"><?php echo escape($sec['existing_sections_count']); ?> টি</span></td>
                                         <td style="text-align: left; font-size:12px; color: var(--text-muted);"><?php echo escape($sec['remark'] ?: '-'); ?></td>
                                         <td class="actions-cell">
-                                            <a href="edit_section.php?id=<?php echo $sec['id']; ?>" class="btn-action edit" style="width:28px; height:28px;" title="শাখা সম্পাদনা"><i class="fa fa-edit"></i></a>
-                                            <a href="delete_section.php?id=<?php echo $sec['id']; ?>" class="btn-action delete" style="width:28px; height:28px;" title="শাখা মুছে ফেলুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই শাখাটি মুছে ফেলতে চান? এর অধীনে থাকা সকল শিক্ষার্থীর শাখা খালি হয়ে যাবে!');"><i class="fa fa-trash"></i></a>
+                                            <a href="<?php echo BASE_URL; ?>/admin/classes/edit_section?id=<?php echo $sec['id']; ?>" class="btn-action edit" style="width:28px; height:28px;" title="শাখা সম্পাদনা"><i class="fa fa-edit"></i></a>
+                                            <a href="<?php echo BASE_URL; ?>/admin/classes/delete_section?id=<?php echo $sec['id']; ?>" class="btn-action delete" style="width:28px; height:28px;" title="শাখা মুছে ফেলুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই শাখাটি মুছে ফেলতে চান? এর অধীনে থাকা সকল শিক্ষার্থীর শাখা খালি হয়ে যাবে!');"><i class="fa fa-trash"></i></a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

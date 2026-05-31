@@ -15,7 +15,7 @@ try {
 
 <div class="page-title">
     <span><i class="fa-solid fa-users-gear"></i> ব্যবস্থাপনা কমিটি সদস্যবৃন্দ (Management Committee)</span>
-    <a href="add" class="btn-admin btn-primary"><i class="fa fa-user-plus"></i> নতুন সদস্য যুক্ত করুন</a>
+    <a href="<?php echo BASE_URL; ?>/admin/committee/add" class="btn-admin btn-primary"><i class="fa fa-user-plus"></i> নতুন সদস্য যুক্ত করুন</a>
 </div>
 
 <div class="admin-card">
@@ -58,8 +58,8 @@ try {
                             <td style="font-family: var(--font-en);"><?php echo escape($m['session_start']); ?> - <?php echo escape($m['session_end']); ?></td>
                             <td style="font-family: var(--font-en); font-weight:bold;"><?php echo escape($m['sort_order']); ?></td>
                             <td class="actions-cell">
-                                <a href="edit?id=<?php echo $m['id']; ?>" class="btn-action edit" title="সম্পাদনা"><i class="fa fa-edit"></i></a>
-                                <a href="delete?id=<?php echo $m['id']; ?>" class="btn-action delete" title="মুছে ফেলুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই কমিটির সদস্য মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
+                                <a href="<?php echo BASE_URL; ?>/admin/committee/edit?id=<?php echo $m['id']; ?>" class="btn-action edit" title="সম্পাদনা"><i class="fa fa-edit"></i></a>
+                                <a href="<?php echo BASE_URL; ?>/admin/committee/delete?id=<?php echo $m['id']; ?>" class="btn-action delete" title="মুছে ফেলুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই কমিটির সদস্য মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

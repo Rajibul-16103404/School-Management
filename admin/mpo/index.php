@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_school_mpo']))
         log_activity($pdo, "Update School MPO Info", "Updated school-level MPO & nationalization status.");
         $_SESSION['flash_success'] = "প্রতিষ্ঠানের এমপিও ও জাতীয়করণ তথ্য সফলভাবে আপডেট করা হয়েছে।";
         
-        header("Location: " . BASE_URL . "/admin/mpo/index.php");
+        header("Location: " . BASE_URL . "/admin/mpo");
         exit;
     } catch (PDOException $e) {
         $error = "ডাটাবেজ ত্রুটি: " . $e->getMessage();
@@ -140,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_school_mpo']))
                                 <td><?php echo escape($t['mpo_scale'] ?: '-'); ?></td>
                                 <td style="font-family: var(--font-en);"><?php echo !empty($t['mpo_date']) ? format_date($t['mpo_date']) : '-'; ?></td>
                                 <td class="actions-cell">
-                                    <a href="edit_teacher_mpo.php?id=<?php echo $t['id']; ?>" class="btn-action edit" title="এমপিও পরিবর্তন"><i class="fa fa-edit"></i></a>
+                                    <a href="<?php echo BASE_URL; ?>/admin/mpo/edit_teacher_mpo?id=<?php echo $t['id']; ?>" class="btn-action edit" title="এমপিও পরিবর্তন"><i class="fa fa-edit"></i></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
