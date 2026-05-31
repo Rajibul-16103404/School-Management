@@ -54,12 +54,62 @@ $school_vision = $school['vision_bn'] ?? 'একটি সুশৃঙ্খল 
 </div>
 <?php endif; ?>
 
-<!-- Hero Banner Area -->
-<div class="hero-slider">
-    <div class="hero-content">
-        <h2>স্বাগতম - <?php echo escape($sch_name_bn); ?></h2>
-        <p><?php echo escape($sch_name_en); ?></p>
-        <p style="font-size: 15px; margin-top: 15px; color: var(--accent);">ইআইআইএন (EIIN): <?php echo escape($sch_eiin); ?> | স্থাপন কাল: <?php echo escape($school['founding_year'] ?? '১৯৭১'); ?></p>
+<!-- Hero Showcase Container (Slider & Headmaster Side-by-Side) -->
+<div class="showcase-container">
+    <!-- Main Image Slider -->
+    <div class="main-slider">
+        <div class="slider-wrapper">
+            <!-- Slide 1 -->
+            <div class="slide active" style="background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), url('<?php echo BASE_URL; ?>/assets/images/slide_1.png');">
+                <div class="slide-content">
+                    <h2>সোনারগাঁও উচ্চ বিদ্যালয়</h2>
+                    <p>ঐতিহ্যবাহী বিদ্যাপীঠ, নারায়ণগঞ্জের একটি অন্যতম আধুনিক শিক্ষাপ্রতিষ্ঠান।</p>
+                </div>
+            </div>
+            <!-- Slide 2 -->
+            <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), url('<?php echo BASE_URL; ?>/assets/images/slide_2.png');">
+                <div class="slide-content">
+                    <h2>মানসম্মত শিক্ষা ও আধুনিক পরিবেশ</h2>
+                    <p>শিক্ষার্থীদের সৃজনশীলতা, বুদ্ধিবৃত্তিক ও নৈতিক গুণাবলীর সুষম বিকাশ নিশ্চিত করা আমাদের অঙ্গীকার।</p>
+                </div>
+            </div>
+            <!-- Slide 3 -->
+            <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), url('<?php echo BASE_URL; ?>/assets/images/slide_3.png');">
+                <div class="slide-content">
+                    <h2>সহশিক্ষা কার্যক্রম ও বিজ্ঞানমনস্ক শিক্ষা</h2>
+                    <p>স্মার্ট বাংলাদেশ গঠনে যুগোপযোগী আইসিটি সমৃদ্ধ ও বাস্তবমুখী শিক্ষা প্রদান করা আমাদের অন্যতম লক্ষ্য।</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slider Navigation Controls -->
+        <button class="slider-nav-btn prev-btn" aria-label="Previous slide">&#10094;</button>
+        <button class="slider-nav-btn next-btn" aria-label="Next slide">&#10095;</button>
+        
+        <!-- Slider Dots -->
+        <div class="slider-dots">
+            <span class="dot active" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
+        </div>
+    </div>
+    
+    <!-- Headmaster Info Beside Slider -->
+    <div class="headmaster-card">
+        <div class="headmaster-card-header">
+            <h3><i class="fa fa-user-tie"></i> প্রধান শিক্ষকের বাণী</h3>
+        </div>
+        <div class="headmaster-card-body">
+            <div class="hm-avatar-wrapper">
+                <img src="<?php echo BASE_URL; ?>/uploads/photos/teacher_1.png" alt="Md. Rafiqul Islam, Head Teacher" class="hm-avatar">
+            </div>
+            <h4>মোঃ রফিকুল ইসলাম</h4>
+            <p class="hm-title">প্রধান শিক্ষক, সোনারগাঁও উচ্চ বিদ্যালয়</p>
+            <div class="hm-quote">
+                "শিক্ষা কেবল বইয়ের জ্ঞানার্জনে সীমাবদ্ধ নয়, বরং শিক্ষার্থীর আত্মিক, নৈতিক ও মানবিক গুণাবলীর সামগ্রিক উন্নয়ন সাধন করাই শিক্ষার আসল লক্ষ্য। আমরা শিক্ষার্থীদের বিজ্ঞানমনস্ক ও সুনাগরিক হিসেবে গড়ে তুলতে প্রতিশ্রুতিবদ্ধ।"
+            </div>
+            <a href="<?php echo BASE_URL; ?>/teachers" class="hm-readmore-btn"><i class="fa fa-id-card"></i> পূর্ণ প্রোফাইল দেখুন</a>
+        </div>
     </div>
 </div>
 
@@ -127,6 +177,90 @@ $school_vision = $school['vision_bn'] ?? 'একটি সুশৃঙ্খল 
         </div>
     </section>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    
+    let currentSlide = 0;
+    const slideInterval = 5000; // 5 seconds auto-cycle
+    let autoSlideTimer;
+    
+    function showSlide(index) {
+        // Handle wrapping
+        if (index >= slides.length) {
+            currentSlide = 0;
+        } else if (index < 0) {
+            currentSlide = slides.length - 1;
+        } else {
+            currentSlide = index;
+        }
+        
+        // Update slides visibility
+        slides.forEach((slide, i) => {
+            if (i === currentSlide) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+        
+        // Update dots state
+        dots.forEach((dot, i) => {
+            if (i === currentSlide) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+    
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+    
+    function prevSlide() {
+        showSlide(currentSlide - 1);
+    }
+    
+    function startAutoSlide() {
+        stopAutoSlide();
+        autoSlideTimer = setInterval(nextSlide, slideInterval);
+    }
+    
+    function stopAutoSlide() {
+        if (autoSlideTimer) {
+            clearInterval(autoSlideTimer);
+        }
+    }
+    
+    // Add Click Events for controls
+    nextBtn.addEventListener('click', () => {
+        nextSlide();
+        startAutoSlide(); // Reset timer on click
+    });
+    
+    prevBtn.addEventListener('click', () => {
+        prevSlide();
+        startAutoSlide(); // Reset timer on click
+    });
+    
+    // Add Click Events for dots
+    dots.forEach(dot => {
+        dot.addEventListener('click', (e) => {
+            const index = parseInt(e.target.getAttribute('data-index'));
+            showSlide(index);
+            startAutoSlide(); // Reset timer on click
+        });
+    });
+    
+    // Start the slider
+    startAutoSlide();
+});
+</script>
 
 <?php
 require_once __DIR__ . '/includes/footer.php';

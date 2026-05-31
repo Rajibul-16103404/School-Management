@@ -35,6 +35,9 @@ $sch_email = $school['email'] ?? 'info@school.gov.bd';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo escape($sch_name_bn); ?> | Sonargaon High School</title>
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="<?php echo BASE_URL; ?>/assets/images/favicon.png">
+    
     <!-- Google Fonts for Bengali and English -->
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     
@@ -62,6 +65,8 @@ $sch_email = $school['email'] ?? 'info@school.gov.bd';
         <div class="logo-area">
             <?php if (!empty($sch_logo) && file_exists(UPLOAD_DIR . '/' . $sch_logo)): ?>
                 <img src="<?php echo UPLOAD_URL . '/' . escape($sch_logo); ?>" alt="School Logo" class="school-logo">
+            <?php elseif (file_exists(__DIR__ . '/../assets/images/logo.png')): ?>
+                <img src="<?php echo BASE_URL; ?>/assets/images/logo.png" alt="School Logo" class="school-logo">
             <?php else: ?>
                 <div class="logo-placeholder">🏫</div>
             <?php endif; ?>
