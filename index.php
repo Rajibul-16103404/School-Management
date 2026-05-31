@@ -36,6 +36,53 @@ if ($pdo) {
 // Fetch school welcome content
 $school_mission = $school['mission_bn'] ?? 'আমাদের লক্ষ্য শিক্ষার্থীদের মানসম্মত শিক্ষা প্রদান করা।';
 $school_vision = $school['vision_bn'] ?? 'একটি সুশৃঙ্খল ডিজিটাল প্রতিষ্ঠান গড়ে তোলা।';
+
+// Fetch CMS Slider data
+$sliders = [];
+if ($school && !empty($school['slider_data'])) {
+    $sliders = json_decode($school['slider_data'], true) ?: [];
+}
+
+// Fallback to defaults if no sliders set
+if (empty($sliders)) {
+    $sliders = [
+        [
+            "image" => "slide_1.png",
+            "title_bn" => "সোনারগাঁও উচ্চ বিদ্যালয়",
+            "title_en" => "Sonargaon High School",
+            "subtitle_bn" => "ঐতিহ্যবাহী বিদ্যাপীঠ, নারায়ণগঞ্জের একটি অন্যতম আধুনিক শিক্ষাপ্রতিষ্ঠান।",
+            "subtitle_en" => "Traditional educational institution, Narayanganj."
+        ],
+        [
+            "image" => "slide_2.png",
+            "title_bn" => "মানসম্মত শিক্ষা ও আধুনিক পরিবেশ",
+            "title_en" => "Quality Education & Modern Environment",
+            "subtitle_bn" => "শিক্ষার্থীদের সৃজনশীলতা, বুদ্ধিবৃত্তিক ও নৈতিক গুণাবলীর সুষম বিকাশ নিশ্চিত করা আমাদের অঙ্গীকার।",
+            "subtitle_en" => "We are committed to nurturing creativity, intelligence, and moral values."
+        ],
+        [
+            "image" => "slide_3.png",
+            "title_bn" => "সহশিক্ষা কার্যক্রম ও বিজ্ঞানমনস্ক শিক্ষা",
+            "title_en" => "Co-curricular & Science-oriented Education",
+            "subtitle_bn" => "স্মার্ট বাংলাদেশ গঠনে যুগোপযোগী আইসিটি সমৃদ্ধ ও বাস্তবমুখী শিক্ষা প্রদান করা আমাদের অন্যতম লক্ষ্য।",
+            "subtitle_en" => "Our key goal is providing ICT-rich and practical education for a Smart Bangladesh."
+        ]
+    ];
+}
+
+// Fetch Headmaster Welcome message details
+$hm_name = $school['headmaster_name_bn'] ?? 'মোঃ রফিকুল ইসলাম';
+$hm_title = 'প্রধান শিক্ষক, ' . ($school['name_bn'] ?? 'সোনারগাঁও উচ্চ বিদ্যালয়');
+$hm_quote = $school['headmaster_quote_bn'] ?? 'শিক্ষা কেবল বইয়ের জ্ঞানার্জনে সীমাবদ্ধ নয়, বরং শিক্ষার্থীর আত্মিক, নৈতিক ও মানবিক গুণাবলীর সামগ্রিক উন্নয়ন সাধন করাই শিক্ষার আসল লক্ষ্য। আমরা শিক্ষার্থীদের বিজ্ঞানমনস্ক ও সুনাগরিক হিসেবে গড়ে তুলতে প্রতিশ্রুতিবদ্ধ।';
+$hm_photo_file = $school['headmaster_photo'] ?? 'teacher_1.png';
+
+$hm_photo_url = '';
+if (file_exists(UPLOAD_DIR . '/photos/' . $hm_photo_file)) {
+    $hm_photo_url = UPLOAD_URL . '/photos/' . $hm_photo_file;
+} else {
+    // Fallback to seeded teacher photo
+    $hm_photo_url = BASE_URL . '/uploads/photos/' . $hm_photo_file;
+}
 ?>
 
 <!-- Announcement Ticker -->
@@ -59,27 +106,22 @@ $school_vision = $school['vision_bn'] ?? 'একটি সুশৃঙ্খল 
     <!-- Main Image Slider -->
     <div class="main-slider">
         <div class="slider-wrapper">
-            <!-- Slide 1 -->
-            <div class="slide active" style="background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), url('<?php echo BASE_URL; ?>/assets/images/slide_1.png');">
-                <div class="slide-content">
-                    <h2>সোনারগাঁও উচ্চ বিদ্যালয়</h2>
-                    <p>ঐতিহ্যবাহী বিদ্যাপীঠ, নারায়ণগঞ্জের একটি অন্যতম আধুনিক শিক্ষাপ্রতিষ্ঠান।</p>
+            <?php foreach ($sliders as $index => $slide): ?>
+                <?php 
+                $slide_image_url = '';
+                if (strpos($slide['image'], 'slide_') !== false) {
+                    $slide_image_url = BASE_URL . '/assets/images/' . $slide['image'];
+                } else {
+                    $slide_image_url = UPLOAD_URL . '/' . $slide['image'];
+                }
+                ?>
+                <div class="slide <?php echo $index === 0 ? 'active' : ''; ?>" style="background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), url('<?php echo escape($slide_image_url); ?>');">
+                    <div class="slide-content">
+                        <h2><?php echo escape($slide['title_bn']); ?></h2>
+                        <p><?php echo escape($slide['subtitle_bn']); ?></p>
+                    </div>
                 </div>
-            </div>
-            <!-- Slide 2 -->
-            <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), url('<?php echo BASE_URL; ?>/assets/images/slide_2.png');">
-                <div class="slide-content">
-                    <h2>মানসম্মত শিক্ষা ও আধুনিক পরিবেশ</h2>
-                    <p>শিক্ষার্থীদের সৃজনশীলতা, বুদ্ধিবৃত্তিক ও নৈতিক গুণাবলীর সুষম বিকাশ নিশ্চিত করা আমাদের অঙ্গীকার।</p>
-                </div>
-            </div>
-            <!-- Slide 3 -->
-            <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), url('<?php echo BASE_URL; ?>/assets/images/slide_3.png');">
-                <div class="slide-content">
-                    <h2>সহশিক্ষা কার্যক্রম ও বিজ্ঞানমনস্ক শিক্ষা</h2>
-                    <p>স্মার্ট বাংলাদেশ গঠনে যুগোপযোগী আইসিটি সমৃদ্ধ ও বাস্তবমুখী শিক্ষা প্রদান করা আমাদের অন্যতম লক্ষ্য।</p>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
         
         <!-- Slider Navigation Controls -->
@@ -88,9 +130,9 @@ $school_vision = $school['vision_bn'] ?? 'একটি সুশৃঙ্খল 
         
         <!-- Slider Dots -->
         <div class="slider-dots">
-            <span class="dot active" data-index="0"></span>
-            <span class="dot" data-index="1"></span>
-            <span class="dot" data-index="2"></span>
+            <?php for ($i = 0; $i < count($sliders); $i++): ?>
+                <span class="dot <?php echo $i === 0 ? 'active' : ''; ?>" data-index="<?php echo $i; ?>"></span>
+            <?php endfor; ?>
         </div>
     </div>
     
@@ -101,12 +143,12 @@ $school_vision = $school['vision_bn'] ?? 'একটি সুশৃঙ্খল 
         </div>
         <div class="headmaster-card-body">
             <div class="hm-avatar-wrapper">
-                <img src="<?php echo BASE_URL; ?>/uploads/photos/teacher_1.png" alt="Md. Rafiqul Islam, Head Teacher" class="hm-avatar">
+                <img src="<?php echo escape($hm_photo_url); ?>" alt="<?php echo escape($hm_name); ?>, Head Teacher" class="hm-avatar">
             </div>
-            <h4>মোঃ রফিকুল ইসলাম</h4>
-            <p class="hm-title">প্রধান শিক্ষক, সোনারগাঁও উচ্চ বিদ্যালয়</p>
+            <h4><?php echo escape($hm_name); ?></h4>
+            <p class="hm-title"><?php echo escape($hm_title); ?></p>
             <div class="hm-quote">
-                "শিক্ষা কেবল বইয়ের জ্ঞানার্জনে সীমাবদ্ধ নয়, বরং শিক্ষার্থীর আত্মিক, নৈতিক ও মানবিক গুণাবলীর সামগ্রিক উন্নয়ন সাধন করাই শিক্ষার আসল লক্ষ্য। আমরা শিক্ষার্থীদের বিজ্ঞানমনস্ক ও সুনাগরিক হিসেবে গড়ে তুলতে প্রতিশ্রুতিবদ্ধ।"
+                "<?php echo nl2br(escape($hm_quote)); ?>"
             </div>
             <a href="<?php echo BASE_URL; ?>/teachers" class="hm-readmore-btn"><i class="fa fa-id-card"></i> পূর্ণ প্রোফাইল দেখুন</a>
         </div>

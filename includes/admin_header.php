@@ -127,6 +127,11 @@ $active_dir = basename(dirname($_SERVER['SCRIPT_NAME']));
                             <i class="fa-solid fa-gears"></i> <span>প্রতিষ্ঠান পরিচিতি</span>
                         </a>
                     </li>
+                    <li class="<?php echo ($active_dir === 'cms') ? 'active' : ''; ?>">
+                        <a href="<?php echo BASE_URL; ?>/admin/cms">
+                            <i class="fa-solid fa-display"></i> <span>ওয়েবসাইট CMS</span>
+                        </a>
+                    </li>
                 <?php endif; ?>
                 
                 <!-- Superadmin only access -->

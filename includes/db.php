@@ -25,6 +25,57 @@ try {
         } catch (PDOException $alterEx) {}
     }
 
+    // Auto-migration: Ensure CMS columns exist in schools table
+    try {
+        $pdo->query("SELECT `headmaster_name_bn` FROM `schools` LIMIT 1");
+    } catch (PDOException $ex) {
+        try {
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `headmaster_name_bn` VARCHAR(255) NULL");
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `headmaster_name_en` VARCHAR(255) NULL");
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `headmaster_photo` VARCHAR(255) NULL");
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `headmaster_quote_bn` TEXT NULL");
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `headmaster_quote_en` TEXT NULL");
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `slider_data` LONGTEXT NULL");
+            
+            // Seed initial CMS values to the existing record
+            $initial_sliders = [
+                [
+                    "image" => "slide_1.png",
+                    "title_bn" => "সোনারগাঁও উচ্চ বিদ্যালয়",
+                    "title_en" => "Sonargaon High School",
+                    "subtitle_bn" => "ঐতিহ্যবাহী বিদ্যাপীঠ, নারায়ণগঞ্জের একটি অন্যতম আধুনিক শিক্ষাপ্রতিষ্ঠান।",
+                    "subtitle_en" => "Traditional educational institution, a modern school in Narayanganj."
+                ],
+                [
+                    "image" => "slide_2.png",
+                    "title_bn" => "মানসম্মত শিক্ষা ও আধুনিক পরিবেশ",
+                    "title_en" => "Quality Education & Modern Environment",
+                    "subtitle_bn" => "শিক্ষার্থীদের সৃজনশীলতা, বুদ্ধিবৃত্তিক ও নৈতিক গুণাবলীর সুষম বিকাশ নিশ্চিত করা আমাদের অঙ্গীকার।",
+                    "subtitle_en" => "We are committed to nurturing creativity, intelligence, and moral values."
+                ],
+                [
+                    "image" => "slide_3.png",
+                    "title_bn" => "সহশিক্ষা কার্যক্রম ও বিজ্ঞানমনস্ক শিক্ষা",
+                    "title_en" => "Co-curricular Activities & Science-oriented Education",
+                    "subtitle_bn" => "স্মার্ট বাংলাদেশ গঠনে যুগোপযোগী আইসিটি সমৃদ্ধ ও বাস্তবমুখী শিক্ষা প্রদান করা আমাদের অন্যতম লক্ষ্য।",
+                    "subtitle_en" => "Our key goal is providing ICT-rich and practical education for a Smart Bangladesh."
+                ]
+            ];
+            $slider_json = json_encode($initial_sliders, JSON_UNESCAPED_UNICODE);
+            
+            $pdo->exec("
+                UPDATE `schools` SET 
+                `headmaster_name_bn` = 'মোঃ রফিকুল ইসলাম',
+                `headmaster_name_en` = 'Md. Rafiqul Islam',
+                `headmaster_photo` = 'teacher_1.png',
+                `headmaster_quote_bn` = 'শিক্ষা কেবল বইয়ের জ্ঞানার্জনে সীমাবদ্ধ নয়, বরং শিক্ষার্থীর আত্মিক, নৈতিক ও মানবিক গুণাবলীর সামগ্রিক উন্নয়ন সাধন করাই শিক্ষার আসল লক্ষ্য। আমরা শিক্ষার্থীদের বিজ্ঞানমনস্ক ও সুনাগরিক হিসেবে গড়ে তুলতে প্রতিশ্রুতিবদ্ধ।',
+                `headmaster_quote_en` = 'Education is not limited to textbook knowledge, but rather to develop spiritual, moral and human qualities. We are committed to building science-oriented good citizens.',
+                `slider_data` = " . $pdo->quote($slider_json) . "
+                WHERE `id` = 1
+            ");
+        } catch (PDOException $alterEx) {}
+    }
+
     // Auto-migration: Ensure remember_token column exists in users table
     try {
         $pdo->query("SELECT `remember_token` FROM `users` LIMIT 1");

@@ -113,6 +113,12 @@ CREATE TABLE IF NOT EXISTS `schools` (
   `mpo_date` DATE NULL,
   `nationalization_status` VARCHAR(100) NULL,
   `nationalization_date` DATE NULL,
+  `headmaster_name_bn` VARCHAR(255) NULL,
+  `headmaster_name_en` VARCHAR(255) NULL,
+  `headmaster_photo` VARCHAR(255) NULL,
+  `headmaster_quote_bn` TEXT NULL,
+  `headmaster_quote_en` TEXT NULL,
+  `slider_data` LONGTEXT NULL,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -206,7 +212,7 @@ CREATE TABLE IF NOT EXISTS `activity_logs` (
 -- =========================================================================
 
 -- Seed default school settings
-INSERT INTO `schools` (`id`, `name_bn`, `name_en`, `eiin`, `founding_year`, `logo`, `mission_bn`, `mission_en`, `vision_bn`, `vision_en`, `objectives_bn`, `objectives_en`, `phone`, `mobile`, `email`, `address_bn`, `address_en`, `mpo_status`, `mpo_number`, `mpo_date`, `map_embed`) VALUES
+INSERT INTO `schools` (`id`, `name_bn`, `name_en`, `eiin`, `founding_year`, `logo`, `mission_bn`, `mission_en`, `vision_bn`, `vision_en`, `objectives_bn`, `objectives_en`, `phone`, `mobile`, `email`, `address_bn`, `address_en`, `mpo_status`, `mpo_number`, `mpo_date`, `map_embed`, `headmaster_name_bn`, `headmaster_name_en`, `headmaster_photo`, `headmaster_quote_bn`, `headmaster_quote_en`, `slider_data`) VALUES
 (1, 'সোনারগাঁও উচ্চ বিদ্যালয়', 'Sonargaon High School', '123456', 1971, NULL, 
 'আমাদের লক্ষ্য শিক্ষার্থীদের মাঝে নৈতিক মূল্যবোধ, বিজ্ঞানমনস্ক দৃষ্টিভঙ্গি এবং দেশপ্রেম জাগ্রত করার মাধ্যমে সুনাগরিক হিসেবে গড়ে তোলা।', 
 'Our mission is to foster moral values, scientific mindset, and patriotism in students to build them as responsible citizens.', 
@@ -215,7 +221,8 @@ INSERT INTO `schools` (`id`, `name_bn`, `name_en`, `eiin`, `founding_year`, `log
 '১. মানসম্মত শিক্ষাদান নিশ্চিত করা।\n২. শৃঙ্খলা ও নিয়মানুবর্তিতা চর্চা।\n৩. সহশিক্ষা কার্যক্রমের প্রসার ঘটানো।', 
 '1. Ensuring quality education.\n2. Practicing discipline and order.\n3. Promoting co-curricular activities.', 
 '+৮৮০২১২৩৪৫৬', '+৮৮০১৭১২৩৪৫৬৭৮', 'info@sonargaonhighschool.edu.bd', 'সোনারগাঁও, নারায়ণগঞ্জ, ঢাকা', 'Sonargaon, Narayanganj, Dhaka', 'MPO', 'MPO-987654321', '1995-03-01', 
-'<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14619.539828359239!2d90.59604314999999!3d23.644265699999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b11eb0aefd9b%3A0xc39f993d3957ebbb!2sSonargaon!5e0!3m2!1sen!2sbd!4v1716942000000!5m2!1sen!2sbd" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>');
+'<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14619.539828359239!2d90.59604314999999!3d23.644265699999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b11eb0aefd9b%3A0xc39f993d3957ebbb!2sSonargaon!5e0!3m2!1sen!2sbd!4v1716942000000!5m2!1sen!2sbd" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>',
+'মোঃ রফিকুল ইসলাম', 'Md. Rafiqul Islam', 'teacher_1.png', 'শিক্ষা কেবল বইয়ের জ্ঞানার্জনে সীমাবদ্ধ নয়, বরং শিক্ষার্থীর আত্মিক, নৈতিক ও মানবিক গুণাবলীর সামগ্রিক উন্নয়ন সাধন করাই শিক্ষার আসল লক্ষ্য। আমরা শিক্ষার্থীদের বিজ্ঞানমনস্ক ও সুনাগরিক হিসেবে গড়ে তুলতে প্রতিশ্রুতিবদ্ধ।', 'Education is not limited to textbook knowledge, but rather to develop spiritual, moral and human qualities. We are committed to building science-oriented good citizens.', '[{"image":"slide_1.png","title_bn":"সোনারগাঁও উচ্চ বিদ্যালয়","title_en":"Sonargaon High School","subtitle_bn":"ঐতিহ্যবাহী বিদ্যাপীঠ, নারায়ণগঞ্জের একটি অন্যতম আধুনিক শিক্ষাপ্রতিষ্ঠান।","subtitle_en":"Traditional educational institution, a modern school in Narayanganj."},{"image":"slide_2.png","title_bn":"মানসম্মত শিক্ষা ও আধুনিক পরিবেশ","title_en":"Quality Education & Modern Environment","subtitle_bn":"শিক্ষার্থীদের সৃজনশীলতা, বুদ্ধিবৃত্তিক ও নৈতিক গুণাবলীর সুষম বিকাশ নিশ্চিত করা আমাদের অঙ্গীকার।","subtitle_en":"We are committed to nurturing creativity, intelligence, and moral values."},{"image":"slide_3.png","title_bn":"সহশিক্ষা কার্যক্রম ও বিজ্ঞানমনস্ক শিক্ষা","title_en":"Co-curricular Activities & Science-oriented Education","subtitle_bn":"স্মার্ট বাংলাদেশ গঠনে যুগোপযোগী আইসিটি সমৃদ্ধ ও বাস্তবমুখী শিক্ষা প্রদান করা আমাদের অন্যতম লক্ষ্য।","subtitle_en":"Our key goal is providing ICT-rich and practical education for a Smart Bangladesh."}]');
 
 -- Seed default admin user (username: admin, password: Admin@123456)
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `name_bn`, `name_en`, `email`) VALUES
