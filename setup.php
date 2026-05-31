@@ -10,6 +10,52 @@ $step = isset($_GET['step']) ? (int)$_GET['step'] : 1;
 $error = null;
 $success = null;
 
+if (!function_exists('escape')) {
+    function escape($str) {
+        return htmlspecialchars($str ?? '', ENT_QUOTES, 'UTF-8');
+    }
+}
+
+// Handle Database Credentials Save
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_credentials'])) {
+    $host = trim($_POST['db_host'] ?? '');
+    $port = trim($_POST['db_port'] ?? '');
+    $name = trim($_POST['db_name'] ?? '');
+    $user = trim($_POST['db_user'] ?? '');
+    $pass = $_POST['db_pass'] ?? '';
+
+    try {
+        // Try connecting to check if credentials are valid
+        $dsn = "mysql:host=" . $host . ";port=" . $port . ";charset=utf8mb4";
+        $test_pdo = new PDO($dsn, $user, $pass, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_TIMEOUT => 5
+        ]);
+        
+        // Save to config.php
+        $configFile = __DIR__ . '/config.php';
+        if (!is_writable($configFile)) {
+            throw new Exception("config.php file is not writeable. Please check file permissions.");
+        }
+        
+        $content = file_get_contents($configFile);
+        $content = preg_replace("/define\('DB_HOST',\s*['\"].*?['\"]\);/", "define('DB_HOST', " . var_export($host, true) . ");", $content);
+        $content = preg_replace("/define\('DB_PORT',\s*['\"].*?['\"]\);/", "define('DB_PORT', " . var_export($port, true) . ");", $content);
+        $content = preg_replace("/define\('DB_NAME',\s*['\"].*?['\"]\);/", "define('DB_NAME', " . var_export($name, true) . ");", $content);
+        $content = preg_replace("/define\('DB_USER',\s*['\"].*?['\"]\);/", "define('DB_USER', " . var_export($user, true) . ");", $content);
+        $content = preg_replace("/define\('DB_PASS',\s*['\"].*?['\"]\);/", "define('DB_PASS', " . var_export($pass, true) . ");", $content);
+        
+        file_put_contents($configFile, $content);
+        
+        header("Location: ?step=2");
+        exit;
+    } catch (PDOException $e) {
+        $error = "Database Connection Failed: " . $e->getMessage();
+    } catch (Exception $e) {
+        $error = "Configuration Save Error: " . $e->getMessage();
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
     try {
         // Step 1: Connect to MySQL server without database first
@@ -21,7 +67,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
 
         // Create Database if it doesn't exist
         $dbName = DB_NAME;
-        $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        try {
+            $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        } catch (PDOException $db_err) {
+            // Ignore privilege error if the database already exists
+        }
         
         // Select the Database
         $pdo->exec("USE `$dbName`");
@@ -289,6 +339,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
             font-weight: 600;
         }
 
+        .form-control-setup {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
+            margin-top: 5px;
+        }
+
+        .form-control-setup:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.04);
+            box-shadow: 0 0 0 2px rgba(26, 92, 56, 0.3);
+        }
+
         .btn {
             display: inline-block;
             width: 100%;
@@ -366,30 +435,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
                 <h2 style="font-size: 18px; margin-bottom: 10px;">স্বাগতম! (Welcome!)</h2>
                 <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 15px;">
                     This setup wizard will automatically configure your MySQL database and create the required tables for the School Management System. 
-                    First, please verify that your database credentials are correctly defined in the <code>config.php</code> file.
+                    Please enter your MySQL database connection credentials below.
                 </p>
             </div>
             
-            <div class="info-grid">
-                <div class="info-card">
-                    <h3>DB Host</h3>
-                    <p><?php echo DB_HOST; ?></p>
+            <form method="POST" action="?step=1" style="margin-bottom: 15px;">
+                <div style="margin-bottom: 15px;">
+                    <label style="font-size: 13px; font-weight: bold; color: var(--text-muted);">Database Host</label>
+                    <input type="text" name="db_host" class="form-control-setup" required value="<?php echo escape(DB_HOST); ?>">
                 </div>
-                <div class="info-card">
-                    <h3>DB Name</h3>
-                    <p><?php echo DB_NAME; ?></p>
+                <div style="margin-bottom: 15px;">
+                    <label style="font-size: 13px; font-weight: bold; color: var(--text-muted);">Database Port</label>
+                    <input type="text" name="db_port" class="form-control-setup" required value="<?php echo escape(DB_PORT); ?>">
                 </div>
-                <div class="info-card">
-                    <h3>DB User</h3>
-                    <p><?php echo DB_USER; ?></p>
+                <div style="margin-bottom: 15px;">
+                    <label style="font-size: 13px; font-weight: bold; color: var(--text-muted);">Database Name</label>
+                    <input type="text" name="db_name" class="form-control-setup" required value="<?php echo escape(DB_NAME); ?>">
                 </div>
-                <div class="info-card">
-                    <h3>PHP Version</h3>
-                    <p><?php echo phpversion(); ?></p>
+                <div style="margin-bottom: 15px;">
+                    <label style="font-size: 13px; font-weight: bold; color: var(--text-muted);">Database Username</label>
+                    <input type="text" name="db_user" class="form-control-setup" required value="<?php echo escape(DB_USER); ?>">
                 </div>
-            </div>
-
-            <a href="?step=2" class="btn">Next Step: Initialize Database</a>
+                <div style="margin-bottom: 25px;">
+                    <label style="font-size: 13px; font-weight: bold; color: var(--text-muted);">Database Password</label>
+                    <input type="password" name="db_pass" class="form-control-setup" value="<?php echo escape(DB_PASS); ?>">
+                </div>
+                
+                <button type="submit" name="save_credentials" class="btn">Save & Continue</button>
+            </form>
             
         <?php elseif ($step === 2): ?>
             <div style="margin-bottom: 20px;">
