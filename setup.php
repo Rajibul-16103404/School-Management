@@ -51,7 +51,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install'])) {
             }
         }
         
-        $success = "Database '$dbName' successfully initialized! Total $executed queries executed. Default admin created (Username: <b>admin</b>, Password: <b>Admin@123456</b>).";
+        
+        // Generate seed images in uploads/photos/
+        if (function_exists('imagecreatetruecolor')) {
+            $target_dir = UPLOAD_DIR . '/photos';
+            if (!is_dir($target_dir)) {
+                mkdir($target_dir, 0755, true);
+            }
+            
+            $generate_seed_image = function(string $filename, string $label) use ($target_dir) {
+                $width = 300;
+                $height = 300;
+                $img = imagecreatetruecolor($width, $height);
+                
+                // Choose background color based on filename hash
+                $hash = md5($filename);
+                $r = hexdec(substr($hash, 0, 2)) % 120 + 60;  // Medium pastel range
+                $g = hexdec(substr($hash, 2, 2)) % 120 + 60;
+                $b = hexdec(substr($hash, 4, 2)) % 120 + 60;
+                
+                $bg_color = imagecolorallocate($img, $r, $g, $b);
+                imagefill($img, 0, 0, $bg_color);
+                
+                // Circle accent
+                $accent_r = max(0, $r - 30);
+                $accent_g = max(0, $g - 30);
+                $accent_b = max(0, $b - 30);
+                $circle_color = imagecolorallocate($img, $accent_r, $accent_g, $accent_b);
+                imagefilledellipse($img, 150, 150, 220, 220, $circle_color);
+                
+                // Draw head & shoulders avatar
+                $white = imagecolorallocate($img, 255, 255, 255);
+                // Shoulders
+                imagefilledarc($img, 150, 230, 140, 110, 180, 360, $white, IMG_ARC_PIE);
+                // Head
+                imagefilledellipse($img, 150, 130, 70, 70, $white);
+                
+                // Draw text label
+                $text_color = imagecolorallocate($img, 255, 255, 255);
+                $shadow_color = imagecolorallocate($img, 0, 0, 0);
+                
+                $font = 5; // standard built-in GD font
+                $text_w = imagefontwidth($font) * strlen($label);
+                $text_h = imagefontheight($font);
+                
+                $x = (int)(($width - $text_w) / 2);
+                $y = 250;
+                
+                // Shadow
+                imagestring($img, $font, $x + 1, $y + 1, $label, $shadow_color);
+                // Text
+                imagestring($img, $font, $x, $y, $label, $text_color);
+                
+                imagepng($img, $target_dir . '/' . $filename);
+                imagedestroy($img);
+            };
+            
+            for ($i = 1; $i <= 20; $i++) {
+                $generate_seed_image("student_{$i}.png", "Student #{$i}");
+                $generate_seed_image("teacher_{$i}.png", "Teacher #{$i}");
+                $generate_seed_image("committee_{$i}.png", "Committee #{$i}");
+            }
+        }
+        
+        $success = "Database '$dbName' successfully initialized! Total $executed queries executed and 60 unique profile photo seeds generated. Default admin created (Username: <b>admin</b>, Password: <b>Admin@123456</b>).";
         $step = 3;
 
     } catch (PDOException $e) {

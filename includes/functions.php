@@ -64,14 +64,16 @@ function display_flash_alerts(): string {
     $html = '';
     
     if (isset($messages['success'])) {
-        $html .= '<div class="alert alert-success alert-dismissible fade show" role="alert" style="padding: 15px; border-radius: 8px; margin-bottom: 20px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #a7f3d0; font-size:14px;">';
-        $html .= '<strong>সফল!</strong> ' . $messages['success'];
+        $html .= '<div class="alert alert-success" role="alert" style="display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-radius: 10px; margin-bottom: 25px; background: #ecfdf5; border-left: 6px solid #10b981; border-top: 1px solid #a7f3d0; border-right: 1px solid #a7f3d0; border-bottom: 1px solid #a7f3d0; color: #065f46; font-size: 15px; font-weight: 500; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.08), 0 4px 6px -4px rgba(16, 185, 129, 0.08);">';
+        $html .= '<span style="font-size: 20px; color: #10b981; display: flex; align-items: center;"><i class="fa-solid fa-circle-check"></i></span>';
+        $html .= '<div><strong>সফল!</strong> ' . $messages['success'] . '</div>';
         $html .= '</div>';
     }
     
     if (isset($messages['error'])) {
-        $html .= '<div class="alert alert-danger alert-dismissible fade show" role="alert" style="padding: 15px; border-radius: 8px; margin-bottom: 20px; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #fca5a5; font-size:14px;">';
-        $html .= '<strong>ত্রুটি!</strong> ' . $messages['error'];
+        $html .= '<div class="alert alert-danger" role="alert" style="display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-radius: 10px; margin-bottom: 25px; background: #fef2f2; border-left: 6px solid #ef4444; border-top: 1px solid #fca5a5; border-right: 1px solid #fca5a5; border-bottom: 1px solid #fca5a5; color: #991b1b; font-size: 15px; font-weight: 500; box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.08), 0 4px 6px -4px rgba(239, 68, 68, 0.08);">';
+        $html .= '<span style="font-size: 20px; color: #ef4444; display: flex; align-items: center;"><i class="fa-solid fa-circle-exclamation"></i></span>';
+        $html .= '<div><strong>ত্রুটি!</strong> ' . $messages['error'] . '</div>';
         $html .= '</div>';
     }
     

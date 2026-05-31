@@ -44,11 +44,11 @@ $host = $_SERVER['HTTP_HOST'] ?? 'localhost:8000';
 // Automatically determine script subdirectory
 $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
 $scriptDir = rtrim($scriptDir, '/');
-if (str_contains($_SERVER['REQUEST_URI'], '/admin')) {
+if (str_contains($_SERVER['REQUEST_URI'] ?? '', '/admin')) {
     // If inside admin subfolder, strip /admin from the end of base path
     $scriptDir = preg_replace('/\/admin(\/.*)?$/', '', $scriptDir);
 }
-if (str_contains($_SERVER['REQUEST_URI'], '/api')) {
+if (str_contains($_SERVER['REQUEST_URI'] ?? '', '/api')) {
     $scriptDir = preg_replace('/\/api(\/.*)?$/', '', $scriptDir);
 }
 

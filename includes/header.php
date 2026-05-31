@@ -81,14 +81,33 @@ $sch_email = $school['email'] ?? 'info@school.gov.bd';
     <div class="container">
         <ul class="nav-list">
             <li><a href="<?php echo BASE_URL; ?>/"><i class="fa fa-home"></i> হোম</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/profile">পরিচিতি</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/recognition">অনুমতি ও স্বীকৃতি</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/students">শিক্ষার্থীর তথ্য</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/sections">অনুমোদিত শাখা</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/academics">পাঠদান তথ্য</a></li>
+            
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">আমাদের সম্পর্কে <i class="fa fa-chevron-down" style="font-size: 11px; margin-left: 4px;"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="<?php echo BASE_URL; ?>/profile">পরিচিতি</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>/recognition">অনুমতি ও স্বীকৃতি</a></li>
+                </ul>
+            </li>
+            
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">একাডেমিক <i class="fa fa-chevron-down" style="font-size: 11px; margin-left: 4px;"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="<?php echo BASE_URL; ?>/students">শিক্ষার্থীর তথ্য</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>/sections">অনুমোদিত শাখা</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>/academics">পাঠদান তথ্য</a></li>
+                </ul>
+            </li>
+            
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">জনবল <i class="fa fa-chevron-down" style="font-size: 11px; margin-left: 4px;"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="<?php echo BASE_URL; ?>/teachers">শিক্ষক-কর্মচারী</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>/committee">ব্যবস্থাপনা কমিটি</a></li>
+                </ul>
+            </li>
+            
             <li><a href="<?php echo BASE_URL; ?>/mpo">এমপিও ও জাতীয়করণ</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/teachers">শিক্ষক-কর্মচারী</a></li>
-            <li><a href="<?php echo BASE_URL; ?>/committee">ব্যবস্থাপনা কমিটি</a></li>
             <li><a href="<?php echo BASE_URL; ?>/contact">যোগাযোগ</a></li>
         </ul>
     </div>

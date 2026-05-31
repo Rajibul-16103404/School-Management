@@ -48,14 +48,19 @@ body {
 
 /* Sidebar Styling */
 .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
     width: 260px;
     background-color: var(--bg-sidebar);
     color: var(--text-light);
     display: flex;
     flex-direction: column;
-    flex-shrink: 0;
     transition: var(--transition);
     z-index: 1000;
+    height: 100vh;
+    overflow-y: auto;
 }
 .admin-sidebar.collapsed {
     width: 70px;
@@ -180,6 +185,11 @@ body {
     display: flex;
     flex-direction: column;
     min-width: 0;
+    margin-left: 260px;
+    transition: var(--transition);
+}
+.admin-sidebar.collapsed ~ .admin-main {
+    margin-left: 70px;
 }
 
 /* Admin Top Bar */
@@ -452,13 +462,17 @@ textarea.form-control {
 /* Mobile Responsiveness Sidebar Toggle */
 @media (max-width: 992px) {
     .admin-sidebar {
-        position: absolute;
+        position: fixed;
         left: -260px;
         top: 0;
         bottom: 0;
+        height: 100vh;
     }
     .admin-sidebar.show {
         left: 0;
+    }
+    .admin-main {
+        margin-left: 0 !important;
     }
 }
 
@@ -497,8 +511,8 @@ textarea.form-control {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(15, 23, 42, 0.6); /* Slate dark overlay */
-    backdrop-filter: blur(4px); /* Premium blur effect */
+    background-color: rgba(15, 23, 42, 0.75); /* High contrast dark overlay */
+    backdrop-filter: blur(8px); /* Premium blur effect */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -507,32 +521,32 @@ textarea.form-control {
 }
 .custom-confirm-card {
     background: #ffffff;
-    border-radius: var(--radius);
-    padding: 30px;
+    border-radius: 16px; /* Rounder corners */
+    padding: 35px 30px;
     width: 90%;
-    max-width: 400px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-width: 420px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Deep shadow */
     text-align: center;
-    border-top: 5px solid var(--danger);
+    border-top: 6px solid var(--danger); /* Thick red border */
     transform: scale(0.95);
     animation: scaleUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 .custom-confirm-icon {
-    font-size: 45px;
+    font-size: 54px;
     color: var(--danger);
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 .custom-confirm-title {
-    font-size: 20px;
+    font-size: 22px;
     color: var(--text-color);
-    margin-bottom: 10px;
-    font-weight: 700;
+    margin-bottom: 12px;
+    font-weight: 800;
 }
 .custom-confirm-message {
     font-size: 15px;
     color: var(--text-muted);
-    margin-bottom: 25px;
-    line-height: 1.5;
+    margin-bottom: 30px;
+    line-height: 1.6;
 }
 .custom-confirm-actions {
     display: flex;
@@ -541,20 +555,21 @@ textarea.form-control {
 }
 .btn-confirm {
     flex: 1;
-    padding: 10px 20px;
-    border-radius: 6px;
+    padding: 12px 24px;
+    border-radius: 8px;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 15px;
     border: none;
     cursor: pointer;
     transition: var(--transition);
 }
 .btn-confirm-secondary {
-    background-color: #e2e8f0;
-    color: #334155;
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
 }
 .btn-confirm-secondary:hover {
-    background-color: #cbd5e1;
+    background-color: #e2e8f0;
 }
 .btn-confirm-danger {
     background-color: var(--danger);
@@ -562,6 +577,50 @@ textarea.form-control {
 }
 .btn-confirm-danger:hover {
     background-color: #dc2626;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+/* Premium Global Alert Redesign Override */
+.alert {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 16px 20px !important;
+    border-radius: 10px !important;
+    margin-bottom: 25px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    text-align: left !important;
+}
+
+.alert-success {
+    background: #ecfdf5 !important;
+    border-left: 6px solid #10b981 !important;
+    border-top: 1px solid #a7f3d0 !important;
+    border-right: 1px solid #a7f3d0 !important;
+    border-bottom: 1px solid #a7f3d0 !important;
+    color: #065f46 !important;
+    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.08), 0 4px 6px -4px rgba(16, 185, 129, 0.08) !important;
+}
+
+.alert-danger {
+    background: #fef2f2 !important;
+    border-left: 6px solid #ef4444 !important;
+    border-top: 1px solid #fca5a5 !important;
+    border-right: 1px solid #fca5a5 !important;
+    border-bottom: 1px solid #fca5a5 !important;
+    color: #991b1b !important;
+    box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.08), 0 4px 6px -4px rgba(239, 68, 68, 0.08) !important;
+}
+
+.alert-warning {
+    background: #fffbeb !important;
+    border-left: 6px solid #f59e0b !important;
+    border-top: 1px solid #fde68a !important;
+    border-right: 1px solid #fde68a !important;
+    border-bottom: 1px solid #fde68a !important;
+    color: #92400e !important;
+    box-shadow: 0 10px 15px -3px rgba(245, 94, 11, 0.08), 0 4px 6px -4px rgba(245, 94, 11, 0.08) !important;
 }
 
 @keyframes fadeIn {
