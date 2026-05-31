@@ -132,6 +132,11 @@ $active_dir = basename(dirname($_SERVER['SCRIPT_NAME']));
                             <i class="fa-solid fa-display"></i> <span>ওয়েবসাইট CMS</span>
                         </a>
                     </li>
+                    <li class="<?php echo ($active_dir === 'backup') ? 'active' : ''; ?>">
+                        <a href="<?php echo BASE_URL; ?>/admin/backup">
+                            <i class="fa-solid fa-database"></i> <span>ডাটা ব্যাকআপ ও রিসেট</span>
+                        </a>
+                    </li>
                 <?php endif; ?>
                 
                 <!-- Superadmin only access -->
