@@ -156,6 +156,7 @@ if ($pdo) {
         </div>
         
         <form method="POST" style="padding: 20px;">
+    <?php echo csrf_input(); ?>
             <input type="hidden" name="id" value="<?php echo $edit_item['id']; ?>">
             
             <div class="form-grid">
@@ -285,6 +286,7 @@ if ($pdo) {
                 <h3 style="font-size: 16px; color: var(--primary-dark); margin-bottom: 15px;"><i class="fa fa-plus-circle" style="color:var(--accent);"></i> নতুন ন্যাভিগেশন মেনু আইটেম যুক্ত করুন</h3>
                 
                 <form method="POST">
+    <?php echo csrf_input(); ?>
                     <div class="form-grid">
                         <div class="admin-form-group">
                             <label for="title_bn">মেনুর নাম (বাংলা) <span style="color:var(--danger);">*</span></label>

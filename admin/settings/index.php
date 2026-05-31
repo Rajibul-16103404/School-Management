@@ -192,6 +192,7 @@ if (isset($_GET['delete_doc_id'])) {
         <div id="profile-tab" class="tab-content active-content">
             <h3 style="font-size: 16px; color: var(--primary-dark); margin-bottom: 15px;"><i class="fa fa-school" style="color:var(--accent);"></i> প্রতিষ্ঠানের সাধারণ তথ্যাবলী</h3>
             <form method="POST" enctype="multipart/form-data">
+    <?php echo csrf_input(); ?>
                 <div class="form-grid">
                     <div class="admin-form-group">
                         <label for="name_bn">প্রতিষ্ঠানের নাম (বাংলা) <span style="color:var(--danger);">*</span></label>
@@ -304,6 +305,7 @@ if (isset($_GET['delete_doc_id'])) {
             
             <!-- Upload Form -->
             <form method="POST" enctype="multipart/form-data" style="background-color: #f8fafc; border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+    <?php echo csrf_input(); ?>
                 <h3 style="font-size: 14px; color: var(--primary); margin-bottom: 15px;"><i class="fa fa-plus-circle"></i> নতুন স্বীকৃতিপত্র যুক্ত করুন:</h3>
                 <div class="form-grid">
                     <div class="admin-form-group">

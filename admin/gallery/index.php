@@ -100,6 +100,7 @@ if (isset($_GET['delete_photo'])) {
     
     <!-- Upload Form -->
     <form method="POST" enctype="multipart/form-data" style="background-color: #f8fafc; border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+    <?php echo csrf_input(); ?>
         <h3 style="font-size: 14px; color: var(--primary); margin-bottom: 15px;"><i class="fa fa-plus-circle"></i> নতুন ছবি যুক্ত করুন:</h3>
         <div style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
             <div style="flex:1; min-width:250px;">

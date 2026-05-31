@@ -72,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_notice'])) {
 
 <div class="admin-card">
     <form method="POST" enctype="multipart/form-data">
+    <?php echo csrf_input(); ?>
         <div class="form-grid">
             <div class="admin-form-group">
                 <label for="title_bn">নোটিশের শিরোনাম (বাংলা) <span style="color:var(--danger);">*</span></label>

@@ -73,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_routine'])) {
 
 <div class="admin-card">
     <form method="POST" enctype="multipart/form-data">
+    <?php echo csrf_input(); ?>
         <div class="form-grid">
             <div class="admin-form-group">
                 <label for="class_id">শ্রেণি নির্বাচন করুন <span style="color:var(--danger);">*</span></label>

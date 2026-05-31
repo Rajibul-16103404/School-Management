@@ -262,14 +262,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const injectCsrfTokens = () => {
         if (typeof CSRF_TOKEN === 'undefined') return;
         
-        // 1. Inject into POST forms
-        document.querySelectorAll('form[method="POST"], form[method="post"]').forEach(form => {
-            if (!form.querySelector('input[name="csrf_token"]')) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'csrf_token';
-                input.value = CSRF_TOKEN;
-                form.appendChild(input);
+        // 1. Inject into all POST forms
+        document.querySelectorAll('form').forEach(form => {
+            if (form.method && form.method.toLowerCase() === 'post') {
+                if (!form.querySelector('input[name="csrf_token"]')) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'csrf_token';
+                    input.value = CSRF_TOKEN;
+                    form.appendChild(input);
+                } else {
+                    const input = form.querySelector('input[name="csrf_token"]');
+                    if (input && !input.value) {
+                        input.value = CSRF_TOKEN;
+                    }
+                }
             }
         });
         
@@ -291,4 +298,36 @@ document.addEventListener('DOMContentLoaded', () => {
         injectCsrfTokens();
     });
     observerCsrf.observe(document.body, { childList: true, subtree: true });
+
+    // Global event interceptors as failsafe backup
+    if (typeof CSRF_TOKEN !== 'undefined') {
+        // Intercept global form submission to ensure token exists
+        document.addEventListener('submit', (e) => {
+            const form = e.target;
+            if (form && form.method && form.method.toLowerCase() === 'post') {
+                let tokenInput = form.querySelector('input[name="csrf_token"]');
+                if (!tokenInput) {
+                    tokenInput = document.createElement('input');
+                    tokenInput.type = 'hidden';
+                    tokenInput.name = 'csrf_token';
+                    tokenInput.value = CSRF_TOKEN;
+                    form.appendChild(tokenInput);
+                } else if (!tokenInput.value) {
+                    tokenInput.value = CSRF_TOKEN;
+                }
+            }
+        });
+
+        // Intercept global clicks on delete links to ensure token is appended
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a');
+            if (link) {
+                let href = link.getAttribute('href');
+                if (href && !href.startsWith('javascript:') && href.includes('delete') && !href.includes('csrf_token=')) {
+                    const connector = href.includes('?') ? '&' : '?';
+                    link.setAttribute('href', href + connector + 'csrf_token=' + CSRF_TOKEN);
+                }
+            }
+        }, true); // Use capturing phase
+    }
 });

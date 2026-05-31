@@ -81,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_member'])) {
 
 <div class="admin-card">
     <form method="POST" enctype="multipart/form-data">
+    <?php echo csrf_input(); ?>
         <div class="form-grid">
             <div class="admin-form-group">
                 <label for="name_bn">সদস্যের নাম (বাংলা) <span style="color:var(--danger);">*</span></label>

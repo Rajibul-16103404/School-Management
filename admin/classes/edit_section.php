@@ -80,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_section'])) {
 
 <div class="admin-card">
     <form method="POST">
+    <?php echo csrf_input(); ?>
         <div class="form-grid">
             <div class="admin-form-group">
                 <label for="class_id">শ্রেণি <span style="color:var(--danger);">*</span></label>

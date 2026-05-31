@@ -106,6 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_user'])) {
 
 <div class="admin-card">
     <form method="POST">
+    <?php echo csrf_input(); ?>
         <div class="form-grid">
             <div class="admin-form-group">
                 <label for="username">ইউজারনেম (Username) <span style="color:var(--danger);">*</span></label>

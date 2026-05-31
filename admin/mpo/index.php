@@ -79,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_school_mpo']))
         <div id="school-mpo-tab" class="tab-content active-content">
             <h3 style="font-size: 16px; color: var(--primary-dark); margin-bottom: 15px;"><i class="fa fa-building" style="color:var(--accent);"></i> প্রতিষ্ঠানের এমপিও ও জাতীয়করণ প্রোফাইল</h3>
             <form method="POST">
+    <?php echo csrf_input(); ?>
                 <div class="form-grid">
                     <div class="admin-form-group">
                         <label for="mpo_status">এমপিও স্ট্যাটাস <span style="color:var(--danger);">*</span></label>

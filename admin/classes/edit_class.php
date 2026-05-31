@@ -81,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_class'])) {
 
 <div class="admin-card">
     <form method="POST">
+    <?php echo csrf_input(); ?>
         <div class="form-grid">
             <div class="admin-form-group">
                 <label for="name_bn">শ্রেণির নাম (বাংলা) <span style="color:var(--danger);">*</span></label>

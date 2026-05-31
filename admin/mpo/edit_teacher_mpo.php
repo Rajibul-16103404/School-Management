@@ -76,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_mpo'])) {
     </div>
 
     <form method="POST">
+    <?php echo csrf_input(); ?>
         <div class="form-grid">
             <div class="admin-form-group">
                 <label for="mpo_index">এমপিও ইনডেক্স নম্বর</label>
