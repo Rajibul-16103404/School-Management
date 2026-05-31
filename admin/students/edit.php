@@ -141,30 +141,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_student'])) {
 
             <div class="admin-form-group">
                 <label for="class_id">শ্রেণি <span style="color:var(--danger);">*</span></label>
-                <select id="class_id" name="class_id" class="form-control" required>
-                    <option value="">শ্রেণি নির্বাচন করুন</option>
-                    <?php foreach ($classes as $c): ?>
-                        <option value="<?php echo $c['id']; ?>" <?php echo (int)$student['class_id'] === (int)$c['id'] ? 'selected' : ''; ?>><?php echo escape($c['name_bn']); ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <div style="display: flex; gap: 8px;">
+                    <select id="class_id" name="class_id" class="form-control" required>
+                        <option value="">শ্রেণি নির্বাচন করুন</option>
+                        <?php foreach ($classes as $c): ?>
+                            <option value="<?php echo $c['id']; ?>" <?php echo (int)$student['class_id'] === (int)$c['id'] ? 'selected' : ''; ?>><?php echo escape($c['name_bn']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <a href="<?php echo BASE_URL; ?>/admin/classes/add_class" class="btn-admin btn-accent" style="display: flex; align-items: center; justify-content: center; width: 42px; min-width: 42px; border-radius: 6px; text-decoration: none;" title="নতুন শ্রেণি যোগ করুন"><i class="fa fa-plus"></i></a>
+                </div>
             </div>
 
             <div class="admin-form-group">
                 <label for="section_id">শাখা <span style="color:var(--danger);">*</span></label>
-                <select id="section_id" name="section_id" class="form-control" required>
-                    <option value="">শাখা নির্বাচন করুন</option>
-                    <?php
-                    // Pre-fill active class sections
-                    try {
-                        $secs = $pdo->prepare("SELECT * FROM `sections` WHERE `class_id` = ?");
-                        $secs->execute([$student['class_id']]);
-                        foreach ($secs->fetchAll() as $sc) {
-                            $sel = (int)$student['section_id'] === (int)$sc['id'] ? 'selected' : '';
-                            echo "<option value='{$sc['id']}' {$sel}>{$sc['name_bn']}</option>";
-                        }
-                    } catch (PDOException $e) {}
-                    ?>
-                </select>
+                <div style="display: flex; gap: 8px;">
+                    <select id="section_id" name="section_id" class="form-control" required>
+                        <option value="">শাখা নির্বাচন করুন</option>
+                        <?php
+                        // Pre-fill active class sections
+                        try {
+                            $secs = $pdo->prepare("SELECT * FROM `sections` WHERE `class_id` = ?");
+                            $secs->execute([$student['class_id']]);
+                            foreach ($secs->fetchAll() as $sc) {
+                                $sel = (int)$student['section_id'] === (int)$sc['id'] ? 'selected' : '';
+                                echo "<option value='{$sc['id']}' {$sel}>{$sc['name_bn']}</option>";
+                            }
+                        } catch (PDOException $e) {}
+                        ?>
+                    </select>
+                    <a href="<?php echo BASE_URL; ?>/admin/classes/add_section" class="btn-admin btn-accent" style="display: flex; align-items: center; justify-content: center; width: 42px; min-width: 42px; border-radius: 6px; text-decoration: none;" title="নতুন শাখা যোগ করুন"><i class="fa fa-plus"></i></a>
+                </div>
             </div>
 
             <div class="admin-form-group">

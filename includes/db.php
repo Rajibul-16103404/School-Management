@@ -76,6 +76,42 @@ try {
         } catch (PDOException $alterEx) {}
     }
 
+    // Auto-migration: Ensure footer and about content columns exist in schools table
+    try {
+        $pdo->query("SELECT `about_text_bn` FROM `schools` LIMIT 1");
+    } catch (PDOException $ex) {
+        try {
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `about_text_bn` TEXT NULL");
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `about_text_en` TEXT NULL");
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `footer_text_bn` TEXT NULL");
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `footer_text_en` TEXT NULL");
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `footer_copyright_bn` VARCHAR(255) NULL");
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `footer_copyright_en` VARCHAR(255) NULL");
+            $pdo->exec("ALTER TABLE `schools` ADD COLUMN `footer_links` LONGTEXT NULL");
+            
+            // Seed initial values
+            $initial_links = [
+                ["title_bn" => "মাধ্যমিক ও উচ্চশিক্ষা অধিদপ্তর", "title_en" => "Directorate of Secondary and Higher Education", "url" => "https://dshe.gov.bd"],
+                ["title_bn" => "শিক্ষা মন্ত্রণালয়", "title_en" => "Ministry of Education", "url" => "https://moedu.gov.bd"],
+                ["title_bn" => "ঢাকা শিক্ষা বোর্ড", "title_en" => "Board of Intermediate and Secondary Education, Dhaka", "url" => "https://dhakaeducationboard.gov.bd"],
+                ["title_bn" => "জাতীয় তথ্য বাতায়ন", "title_en" => "National Web Portal", "url" => "https://www.bangladesh.gov.bd"]
+            ];
+            $links_json = json_encode($initial_links, JSON_UNESCAPED_UNICODE);
+            
+            $pdo->exec("
+                UPDATE `schools` SET 
+                `about_text_bn` = 'আমাদের প্রতিষ্ঠানটি ১৯৭১ সালে প্রতিষ্ঠিত হয়। এটি নারায়ণগঞ্জ জেলার সোনারগাঁও উপজেলার একটি ঐতিহ্যবাহী শিক্ষাপ্রতিষ্ঠান। জাতীয় শিক্ষা ধারা ও নীতিমালার আলোকে শিক্ষার্থীদের মাঝে নৈতিক গুণাবলী বিকশিত করাই আমাদের লক্ষ্য।',
+                `about_text_en` = 'Our institution was established in 1971. It is a traditional educational institution in Sonargaon Upazila of Narayanganj district. Our goal is to develop moral qualities among students in the light of national educational trends and policies.',
+                `footer_text_bn` = 'আমাদের মূল লক্ষ্য শিক্ষার্থীদের মানবিক মূল্যবোধ সম্পন্ন সুনাগরিক হিসেবে গড়ে তোলা। মানসম্মত শিক্ষা নিশ্চিতকরণে আমরা সর্বদা প্রতিজ্ঞাবদ্ধ।',
+                `footer_text_en` = 'Our main goal is to build students as good citizens with human values. We are always committed to ensuring quality education.',
+                `footer_copyright_bn` = 'সোনারগাঁও উচ্চ বিদ্যালয়. সর্বস্বত্ব সংরক্ষিত।',
+                `footer_copyright_en` = 'Sonargaon High School. All rights reserved.',
+                `footer_links` = " . $pdo->quote($links_json) . "
+                WHERE `id` = 1
+            ");
+        } catch (PDOException $alterEx) {}
+    }
+
     // Auto-migration: Ensure remember_token column exists in users table
     try {
         $pdo->query("SELECT `remember_token` FROM `users` LIMIT 1");

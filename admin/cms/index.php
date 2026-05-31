@@ -132,10 +132,85 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_headmaster']))
         
         log_activity($pdo, "Update Headmaster Welcome Info", "Updated Headmaster name and quotes.");
         $_SESSION['flash_success'] = "প্রধান শিক্ষকের বাণী ও তথ্য সফলভাবে আপডেট করা হয়েছে।";
-        header("Location: " . BASE_URL . "/admin/cms");
+        header("Location: " . BASE_URL . "/admin/cms?tab=headmaster");
         exit;
     } catch (Exception $e) {
         $error = "তথ্য পরিবর্তন ব্যর্থ হয়েছে: " . $e->getMessage();
+    }
+}
+
+// 4. Handle About settings update
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_about'])) {
+    $about_bn = sanitize_input($_POST['about_text_bn'] ?? '');
+    $about_en = sanitize_input($_POST['about_text_en'] ?? '');
+
+    try {
+        $update_sql = "
+            UPDATE `schools` SET 
+            `about_text_bn` = ?,
+            `about_text_en` = ?
+            WHERE `id` = 1
+        ";
+        $stmt = $pdo->prepare($update_sql);
+        $stmt->execute([$about_bn, $about_en]);
+        
+        log_activity($pdo, "Update About Content", "Updated school about content.");
+        $_SESSION['flash_success'] = "প্রতিষ্ঠানের পরিচিতি সফলভাবে আপডেট করা হয়েছে।";
+        header("Location: " . BASE_URL . "/admin/cms?tab=about");
+        exit;
+    } catch (PDOException $e) {
+        $error = "পরিচিতি পরিবর্তন ব্যর্থ হয়েছে: " . $e->getMessage();
+    }
+}
+
+// 5. Handle Footer settings update
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_footer'])) {
+    $footer_text_bn = sanitize_input($_POST['footer_text_bn'] ?? '');
+    $footer_text_en = sanitize_input($_POST['footer_text_en'] ?? '');
+    $footer_copyright_bn = sanitize_input($_POST['footer_copyright_bn'] ?? '');
+    $footer_copyright_en = sanitize_input($_POST['footer_copyright_en'] ?? '');
+    
+    // Parse links array
+    $link_titles_bn = $_POST['link_title_bn'] ?? [];
+    $link_titles_en = $_POST['link_title_en'] ?? [];
+    $link_urls = $_POST['link_url'] ?? [];
+    
+    $links = [];
+    for ($i = 0; $i < count($link_titles_bn); $i++) {
+        $title_bn = sanitize_input($link_titles_bn[$i] ?? '');
+        $title_en = sanitize_input($link_titles_en[$i] ?? '');
+        $url = sanitize_input($link_urls[$i] ?? '');
+        
+        if (!empty($title_bn) && !empty($url)) {
+            $links[] = [
+                'title_bn' => $title_bn,
+                'title_en' => $title_en,
+                'url' => $url
+            ];
+        }
+    }
+    
+    $links_json = json_encode($links, JSON_UNESCAPED_UNICODE);
+
+    try {
+        $update_sql = "
+            UPDATE `schools` SET 
+            `footer_text_bn` = ?,
+            `footer_text_en` = ?,
+            `footer_copyright_bn` = ?,
+            `footer_copyright_en` = ?,
+            `footer_links` = ?
+            WHERE `id` = 1
+        ";
+        $stmt = $pdo->prepare($update_sql);
+        $stmt->execute([$footer_text_bn, $footer_text_en, $footer_copyright_bn, $footer_copyright_en, $links_json]);
+        
+        log_activity($pdo, "Update Footer Settings", "Updated school footer info and links.");
+        $_SESSION['flash_success'] = "ফুটার সেটিংস ও লিংকসমূহ সফলভাবে আপডেট করা হয়েছে।";
+        header("Location: " . BASE_URL . "/admin/cms?tab=footer");
+        exit;
+    } catch (PDOException $e) {
+        $error = "ফুটার পরিবর্তন ব্যর্থ হয়েছে: " . $e->getMessage();
     }
 }
 ?>
@@ -160,6 +235,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_headmaster']))
         </button>
         <button class="tab-btn" onclick="switchTab(event, 'headmaster-tab')" style="padding: 15px 25px; background: none; border: none; color: #94a3b8; font-weight: bold; cursor: pointer; font-family: var(--font-bn); font-size: 15px; border-bottom: 3px solid transparent; transition: var(--transition); white-space: nowrap; display: flex; align-items: center; gap: 8px;">
             <i class="fa fa-user-tie"></i> প্রধান শিক্ষকের বাণী (Welcome Message)
+        </button>
+        <button class="tab-btn" onclick="switchTab(event, 'about-tab')" style="padding: 15px 25px; background: none; border: none; color: #94a3b8; font-weight: bold; cursor: pointer; font-family: var(--font-bn); font-size: 15px; border-bottom: 3px solid transparent; transition: var(--transition); white-space: nowrap; display: flex; align-items: center; gap: 8px;">
+            <i class="fa fa-address-card"></i> প্রতিষ্ঠান পরিচিতি (About Info)
+        </button>
+        <button class="tab-btn" onclick="switchTab(event, 'footer-tab')" style="padding: 15px 25px; background: none; border: none; color: #94a3b8; font-weight: bold; cursor: pointer; font-family: var(--font-bn); font-size: 15px; border-bottom: 3px solid transparent; transition: var(--transition); white-space: nowrap; display: flex; align-items: center; gap: 8px;">
+            <i class="fa fa-anchor"></i> ফুটার সেটিংস (Footer Settings)
         </button>
     </div>
 
@@ -301,6 +382,115 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_headmaster']))
                 </div>
             </form>
         </div>
+
+        <!-- Tab 3: About Text -->
+        <div id="about-tab" class="tab-content" style="display: none;">
+            <h3 style="font-size: 16px; color: var(--primary-dark); margin-bottom: 20px;"><i class="fa fa-address-card"></i> প্রতিষ্ঠান পরিচিতি বিবরণ সম্পাদন করুন</h3>
+            
+            <form method="POST">
+                <?php echo csrf_input(); ?>
+                <div class="form-grid">
+                    <div class="admin-form-group" style="grid-column: span 2;">
+                        <label for="about_text_bn">পরিচিতি বিবরণ (বাংলা) <span style="color:var(--danger);">*</span></label>
+                        <textarea id="about_text_bn" name="about_text_bn" class="form-control" rows="8" required><?php echo escape($school['about_text_bn'] ?? ''); ?></textarea>
+                    </div>
+                    
+                    <div class="admin-form-group" style="grid-column: span 2;">
+                        <label for="about_text_en">পরিচিতি বিবরণ (English) <span style="color:var(--danger);">*</span></label>
+                        <textarea id="about_text_en" name="about_text_en" class="form-control" rows="8" required><?php echo escape($school['about_text_en'] ?? ''); ?></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions" style="margin-top:20px; padding-top:15px;">
+                    <button type="submit" name="update_about" class="btn-admin btn-accent"><i class="fa fa-save"></i> পরিচিতি সংরক্ষণ করুন</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tab 4: Footer Settings -->
+        <div id="footer-tab" class="tab-content" style="display: none;">
+            <h3 style="font-size: 16px; color: var(--primary-dark); margin-bottom: 20px;"><i class="fa fa-anchor"></i> ফুটার সেটিংস ও কাস্টমাইজেশন</h3>
+            
+            <form method="POST">
+                <?php echo csrf_input(); ?>
+                <div class="form-grid">
+                    <div class="admin-form-group" style="grid-column: span 2;">
+                        <label for="footer_text_bn">ফুটার সংক্ষিপ্ত বিবরণ (বাংলা) <span style="color:var(--danger);">*</span></label>
+                        <textarea id="footer_text_bn" name="footer_text_bn" class="form-control" rows="3" required><?php echo escape($school['footer_text_bn'] ?? ''); ?></textarea>
+                    </div>
+                    
+                    <div class="admin-form-group" style="grid-column: span 2;">
+                        <label for="footer_text_en">ফুটার সংক্ষিপ্ত বিবরণ (English) <span style="color:var(--danger);">*</span></label>
+                        <textarea id="footer_text_en" name="footer_text_en" class="form-control" rows="3" required><?php echo escape($school['footer_text_en'] ?? ''); ?></textarea>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label for="footer_copyright_bn">কপিরাইট নোটিশ (বাংলা) <span style="color:var(--danger);">*</span></label>
+                        <input type="text" id="footer_copyright_bn" name="footer_copyright_bn" class="form-control" required value="<?php echo escape($school['footer_copyright_bn'] ?? ''); ?>">
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label for="footer_copyright_en">কপিরাইট নোটিশ (English) <span style="color:var(--danger);">*</span></label>
+                        <input type="text" id="footer_copyright_en" name="footer_copyright_en" class="form-control" required value="<?php echo escape($school['footer_copyright_en'] ?? ''); ?>">
+                    </div>
+
+                    <div class="admin-form-group form-group-full" style="margin-top: 15px;">
+                        <label style="display: block; margin-bottom: 10px; font-weight: bold; color: var(--text-color);">গুরুত্বপূর্ণ লিঙ্কসমূহ (Footer Links)</label>
+                        <div class="admin-table-responsive">
+                            <table class="admin-table" id="links-table">
+                                <thead>
+                                    <tr>
+                                        <th>লিংকের শিরোনাম (বাংলা)</th>
+                                        <th>লিংকের শিরোনাম (English)</th>
+                                        <th>ইউআরএল (URL)</th>
+                                        <th style="width: 80px; text-align: center;">অ্যাকশন</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php 
+                                    $links_list = [];
+                                    if (!empty($school['footer_links'])) {
+                                        $links_list = json_decode($school['footer_links'], true) ?: [];
+                                    }
+                                    if (empty($links_list)) {
+                                        $links_list = [
+                                            ["title_bn" => "মাধ্যমিক ও উচ্চশিক্ষা অধিদপ্তর", "title_en" => "Directorate of Secondary and Higher Education", "url" => "https://dshe.gov.bd"],
+                                            ["title_bn" => "শিক্ষা মন্ত্রণালয়", "title_en" => "Ministry of Education", "url" => "https://moedu.gov.bd"],
+                                            ["title_bn" => "ঢাকা শিক্ষা বোর্ড", "title_en" => "Board of Intermediate and Secondary Education, Dhaka", "url" => "https://dhakaeducationboard.gov.bd"],
+                                            ["title_bn" => "জাতীয় তথ্য বাতায়ন", "title_en" => "National Web Portal", "url" => "https://www.bangladesh.gov.bd"]
+                                        ];
+                                    }
+                                    foreach ($links_list as $link): 
+                                    ?>
+                                    <tr>
+                                        <td>
+                                            <input type="text" name="link_title_bn[]" class="form-control" value="<?php echo escape($link['title_bn'] ?? ''); ?>" placeholder="যেমন: শিক্ষা বোর্ড" required>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="link_title_en[]" class="form-control" value="<?php echo escape($link['title_en'] ?? ''); ?>" placeholder="e.g. Education Board">
+                                        </td>
+                                        <td>
+                                            <input type="url" name="link_url[]" class="form-control" value="<?php echo escape($link['url'] ?? ''); ?>" placeholder="https://..." required>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <button type="button" class="btn-admin btn-danger" style="padding: 6px 12px;" onclick="removeLinkRow(this)"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="margin-top: 10px; text-align: right;">
+                            <button type="button" class="btn-admin btn-primary" onclick="addLinkRow()"><i class="fa fa-plus-circle"></i> নতুন লিঙ্ক যোগ করুন</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions" style="margin-top:20px; padding-top:15px;">
+                    <button type="submit" name="update_footer" class="btn-admin btn-accent"><i class="fa fa-save"></i> ফুটার সেটিংস সংরক্ষণ করুন</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -330,10 +520,58 @@ function switchTab(evt, tabId) {
     }
 
     document.getElementById(tabId).style.display = "block";
-    evt.currentTarget.classList.add("active");
-    evt.currentTarget.style.borderBottom = "3px solid var(--accent)";
-    evt.currentTarget.style.color = "white";
+    if (evt) {
+        evt.currentTarget.classList.add("active");
+        evt.currentTarget.style.borderBottom = "3px solid var(--accent)";
+        evt.currentTarget.style.color = "white";
+    }
 }
+
+// Add/Remove dynamic footer links row
+function addLinkRow() {
+    const tableBody = document.querySelector("#links-table tbody");
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>
+            <input type="text" name="link_title_bn[]" class="form-control" placeholder="যেমন: শিক্ষা বোর্ড" required>
+        </td>
+        <td>
+            <input type="text" name="link_title_en[]" class="form-control" placeholder="e.g. Education Board">
+        </td>
+        <td>
+            <input type="url" name="link_url[]" class="form-control" placeholder="https://..." required>
+        </td>
+        <td style="text-align: center;">
+            <button type="button" class="btn-admin btn-danger" style="padding: 6px 12px;" onclick="removeLinkRow(this)"><i class="fa fa-trash"></i></button>
+        </td>
+    `;
+    tableBody.appendChild(row);
+}
+
+function removeLinkRow(button) {
+    const row = button.closest("tr");
+    if (document.querySelectorAll("#links-table tbody tr").length > 1) {
+        row.remove();
+    } else {
+        alert("অবশ্যই অন্তত একটি লিংক থাকতে হবে।");
+    }
+}
+
+// Parse url parameters to auto-activate stored tab
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeTab = urlParams.get('tab');
+    if (activeTab === 'about') {
+        const btn = document.querySelector('button[onclick*="about-tab"]');
+        if (btn) btn.click();
+    } else if (activeTab === 'footer') {
+        const btn = document.querySelector('button[onclick*="footer-tab"]');
+        if (btn) btn.click();
+    } else if (activeTab === 'headmaster') {
+        const btn = document.querySelector('button[onclick*="headmaster-tab"]');
+        if (btn) btn.click();
+    }
+});
 </script>
 
 <?php

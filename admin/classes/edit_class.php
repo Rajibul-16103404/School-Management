@@ -100,12 +100,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_class'])) {
 
             <div class="admin-form-group">
                 <label for="class_teacher_id">শ্রেণি শিক্ষক (Class Teacher)</label>
-                <select id="class_teacher_id" name="class_teacher_id" class="form-control">
-                    <option value="">কোনো শিক্ষক নির্ধারিত নয়</option>
-                    <?php foreach ($teachers as $t): ?>
-                        <option value="<?php echo $t['id']; ?>" <?php echo (int)$class['class_teacher_id'] === (int)$t['id'] ? 'selected' : ''; ?>><?php echo escape($t['name_bn']); ?> (<?php echo escape($t['designation_bn']); ?>)</option>
-                    <?php endforeach; ?>
-                </select>
+                <div style="display: flex; gap: 8px;">
+                    <select id="class_teacher_id" name="class_teacher_id" class="form-control">
+                        <option value="">কোনো শিক্ষক নির্ধারিত নয়</option>
+                        <?php foreach ($teachers as $t): ?>
+                            <option value="<?php echo $t['id']; ?>" <?php echo (int)$class['class_teacher_id'] === (int)$t['id'] ? 'selected' : ''; ?>><?php echo escape($t['name_bn']); ?> (<?php echo escape($t['designation_bn']); ?>)</option>
+                        <?php endforeach; ?>
+                    </select>
+                    <a href="<?php echo BASE_URL; ?>/admin/teachers/add" class="btn-admin btn-accent" style="display: flex; align-items: center; justify-content: center; width: 42px; min-width: 42px; border-radius: 6px; text-decoration: none;" title="নতুন শিক্ষক যোগ করুন"><i class="fa fa-plus"></i></a>
+                </div>
             </div>
         </div>
 
