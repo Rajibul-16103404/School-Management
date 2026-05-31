@@ -221,10 +221,10 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `name_bn`, `name_en`,
 (1, 'admin', '$2y$12$cELO4H7gZM3BbLLPK14BK.PF6sGrVyWZos9L0KltkN6BfZ5L36gNy', 'superadmin', 'প্রধান অ্যাডমিন', 'System Administrator', 'admin@school.gov.bd');
 
 -- Seed default teachers for referencing
-INSERT INTO `teachers` (`id`, `name_bn`, `name_en`, `designation_bn`, `designation_en`, `subject_bn`, `subject_en`, `mpo_index`, `mpo_scale`, `mpo_date`, `nid`, `qualification_bn`, `qualification_en`, `joining_date`, `is_teacher`, `department`, `phone`, `email`) VALUES
-(1, 'মোঃ রফিকুল ইসলাম', 'Md. Rafiqul Islam', 'প্রধান শিক্ষক', 'Head Teacher', 'গণিত', 'Mathematics', 'T-1002030', 'Grade 7 (Scale: 29000-63000)', '1998-05-10', '1980671234567', 'এম.এসসি (গণিত), বি.এড (১ম শ্রেণি)', 'M.Sc (Mathematics), B.Ed (1st Class)', '2010-01-15', 1, 'General', '01711223344', 'rafiq@school.edu.bd'),
-(2, 'মোসাম্মাৎ ফাতেমা আক্তার', 'Mst. Fatema Akter', 'সহকারী প্রধান শিক্ষক', 'Assistant Head Teacher', 'ইংরেজি', 'English', 'T-2003040', 'Grade 8 (Scale: 23000-55470)', '2002-09-20', '1985671234568', 'এম.এ (ইংরেজি), এম.এড', 'M.A (English), M.Ed', '2012-03-01', 1, 'General', '01722334455', 'fatema@school.edu.bd'),
-(3, 'আব্দুল করিম', 'Abdul Karim', 'সহকারী শিক্ষক', 'Assistant Teacher', 'পদার্থবিজ্ঞান', 'Physics', 'T-3004050', 'Grade 9 (Scale: 22000-53060)', '2008-01-12', '1990671234569', 'বি.এসসি (অনার্স), এম.এসসি (পদার্থবিজ্ঞান)', 'B.Sc (Hons), M.Sc (Physics)', '2015-08-01', 1, 'Science', '01733445566', 'karim@school.edu.bd');
+INSERT INTO `teachers` (`id`, `name_bn`, `name_en`, `designation_bn`, `designation_en`, `subject_bn`, `subject_en`, `mpo_index`, `mpo_scale`, `mpo_date`, `nid`, `qualification_bn`, `qualification_en`, `photo`, `joining_date`, `is_teacher`, `department`, `phone`, `email`) VALUES
+(1, 'মোঃ রফিকুল ইসলাম', 'Md. Rafiqul Islam', 'প্রধান শিক্ষক', 'Head Teacher', 'গণিত', 'Mathematics', 'T-1002030', 'Grade 7 (Scale: 29000-63000)', '1998-05-10', '1980671234567', 'এম.এসসি (গণিত), বি.এড (১ম শ্রেণি)', 'M.Sc (Mathematics), B.Ed (1st Class)', 'photos/teacher_male.png', '2010-01-15', 1, 'General', '01711223344', 'rafiq@school.edu.bd'),
+(2, 'মোসাম্মাৎ ফাতেমা আক্তার', 'Mst. Fatema Akter', 'সহকারী প্রধান শিক্ষক', 'Assistant Head Teacher', 'ইংরেজি', 'English', 'T-2003040', 'Grade 8 (Scale: 23000-55470)', '2002-09-20', '1985671234568', 'এম.এ (ইংরেজি), এম.এড', 'M.A (English), M.Ed', 'photos/teacher_female.png', '2012-03-01', 1, 'General', '01722334455', 'fatema@school.edu.bd'),
+(3, 'আব্দুল করিম', 'Abdul Karim', 'সহকারী শিক্ষক', 'Assistant Teacher', 'পদার্থবিজ্ঞান', 'Physics', 'T-3004050', 'Grade 9 (Scale: 22000-53060)', '2008-01-12', '1990671234569', 'বি.এসসি (অনার্স), এম.এসসি (পদার্থবিজ্ঞান)', 'B.Sc (Hons), M.Sc (Physics)', 'photos/teacher_male.png', '2015-08-01', 1, 'Science', '01733445566', 'karim@school.edu.bd');
 
 -- Seed default class structures (6th to 10th grade)
 INSERT INTO `classes` (`id`, `name_bn`, `name_en`, `numeric_name`, `class_teacher_id`) VALUES
@@ -246,15 +246,27 @@ INSERT INTO `sections` (`id`, `class_id`, `name_bn`, `name_en`, `approved_sectio
 (8, 5, 'মানবিক শাখা', 'Humanities Group', 1, 1, 'Approved');
 
 -- Seed initial students data (used for dynamic statistical charts/tables)
-INSERT INTO `students` (`name_bn`, `name_en`, `class_id`, `section_id`, `roll`, `gender`, `dob`, `guardian_name_bn`, `guardian_name_en`, `mobile`) VALUES
-('মোঃ হাসান আলী', 'Md. Hasan Ali', 1, 1, 1, 'Male', '2014-05-12', 'মোঃ আব্দুর রহমান', 'Md. Abdur Rahman', '01911111111'),
-('মোসাম্মাৎ মারিয়া আক্তার', 'Mst. Maria Akter', 1, 1, 2, 'Female', '2014-08-20', 'মোঃ মোস্তফা কামাল', 'Md. Mostafa Kamal', '01911111112'),
-('তাসনোভা ইসলাম', 'Tasnova Islam', 1, 1, 3, 'Female', '2014-03-15', 'শফিকুল ইসলাম', 'Shafiqul Islam', '01911111113'),
-('মোঃ সাকিব আল হাসান', 'Md. Sakib Al Hasan', 2, 3, 1, 'Male', '2013-02-10', 'মোঃ রেজাউল হক', 'Md. Rezaul Hoque', '01911111114'),
-('ফারিয়া রহমান', 'Faria Rahman', 2, 3, 2, 'Female', '2013-11-25', 'মোঃ হাবিবুর রহমান', 'Md. Habibur Rahman', '01911111115'),
-('সাদিয়া ইসলাম', 'Sadia Islam', 3, 4, 1, 'Female', '2012-06-05', 'মোঃ রফিকুল ইসলাম', 'Md. Rafiqul Islam', '01911111116'),
-('মোঃ তানভীর হোসেন', 'Md. Tanvir Hossain', 4, 5, 1, 'Male', '2011-09-18', 'মোঃ আবুল হোসেন', 'Md. Abul Hossain', '01911111117'),
-('আফরিন সুলতানা', 'Afrin Sultana', 5, 7, 1, 'Female', '2010-01-30', 'মোঃ সুলতান আহমেদ', 'Md. Sultan Ahmed', '01911111118');
+INSERT INTO `students` (`name_bn`, `name_en`, `class_id`, `section_id`, `roll`, `gender`, `dob`, `guardian_name_bn`, `guardian_name_en`, `mobile`, `photo`) VALUES
+('মোঃ হাসান আলী', 'Md. Hasan Ali', 1, 1, 1, 'Male', '2014-05-12', 'মোঃ আব্দুর রহমান', 'Md. Abdur Rahman', '01911111111', 'photos/student_boy.png'),
+('মোসাম্মাৎ মারিয়া আক্তার', 'Mst. Maria Akter', 1, 1, 2, 'Female', '2014-08-20', 'মোঃ মোস্তফা কামাল', 'Md. Mostafa Kamal', '01911111112', 'photos/student_girl.png'),
+('তাসনোভা ইসলাম', 'Tasnova Islam', 1, 1, 3, 'Female', '2014-03-15', 'শফিকুল ইসলাম', 'Shafiqul Islam', '01911111113', 'photos/student_girl.png'),
+('মোঃ সাকিব আল হাসান', 'Md. Sakib Al Hasan', 2, 3, 1, 'Male', '2013-02-10', 'মোঃ রেজাউল হক', 'Md. Rezaul Hoque', '01911111114', 'photos/student_boy.png'),
+('ফারিয়া রহমান', 'Faria Rahman', 2, 3, 2, 'Female', '2013-11-25', 'মোঃ হাবিবুর রহমান', 'Md. Habibur Rahman', '01911111115', 'photos/student_girl.png'),
+('সাদিয়া ইসলাম', 'Sadia Islam', 3, 4, 1, 'Female', '2012-06-05', 'মোঃ রফিকুল ইসলাম', 'Md. Rafiqul Islam', '01911111116', 'photos/student_girl.png'),
+('মোঃ তানভীর হোসেন', 'Md. Tanvir Hossain', 4, 5, 1, 'Male', '2011-09-18', 'মোঃ আবুল হোসেন', 'Md. Abul Hossain', '01911111117', 'photos/student_boy.png'),
+('আফরিন সুলতানা', 'Afrin Sultana', 5, 7, 1, 'Female', '2010-01-30', 'মোঃ সুলতান আহমেদ', 'Md. Sultan Ahmed', '01911111118', 'photos/student_girl.png'),
+('মোঃ রাশেদুল ইসলাম', 'Md. Rashedul Islam', 1, 2, 1, 'Male', '2014-04-10', 'মোঃ জহিরুল ইসলাম', 'Md. Johirul Islam', '01911111119', 'photos/student_boy.png'),
+('সুমি আক্তার', 'Sumi Akter', 1, 2, 2, 'Female', '2014-06-15', 'মোঃ রফিকুল ইসলাম', 'Md. Rafiqul Islam', '01911111120', 'photos/student_girl.png'),
+('মোঃ আরিয়ান খান', 'Md. Ariyan Khan', 2, 3, 3, 'Male', '2013-09-22', 'মোঃ শামীম খান', 'Md. Shamim Khan', '01911111121', 'photos/student_boy.png'),
+('নাবিলা রহমান', 'Nabila Rahman', 2, 3, 4, 'Female', '2013-05-18', 'মোঃ লুৎফর রহমান', 'Md. Lutfar Rahman', '01911111122', 'photos/student_girl.png'),
+('মোঃ মাহিন ইসলাম', 'Md. Mahin Islam', 3, 4, 2, 'Male', '2012-03-30', 'মোঃ নূরুল ইসলাম', 'Md. Nurul Islam', '01911111123', 'photos/student_boy.png'),
+('মোসাম্মাৎ জেস্মিন আক্তার', 'Mst. Jesmin Akter', 3, 4, 3, 'Female', '2012-07-12', 'মোঃ আলমগীর হোসেন', 'Md. Alamgir Hossain', '01911111124', 'photos/student_girl.png'),
+('মোঃ আসিফ রহমান', 'Md. Asif Rahman', 4, 5, 2, 'Male', '2011-12-05', 'মোঃ মিজানুর রহমান', 'Md. Mijanur Rahman', '01911111125', 'photos/student_boy.png'),
+('তানজিলা আক্তার', 'Tanjila Akter', 4, 6, 1, 'Female', '2011-08-25', 'মোঃ আনোয়ার হোসেন', 'Md. Anwar Hossain', '01911111126', 'photos/student_girl.png'),
+('মোঃ জিসান আহমেদ', 'Md. Jisan Ahmed', 4, 6, 2, 'Male', '2011-05-14', 'মোঃ শাহজাহান আলী', 'Md. Shahjahan Ali', '01911111127', 'photos/student_boy.png'),
+('মোঃ ফাহিম মুনতাসির', 'Md. Fahim Muntasir', 5, 7, 2, 'Male', '2010-10-10', 'মোঃ জাহাঙ্গীর আলম', 'Md. Jahangir Alam', '01911111128', 'photos/student_boy.png'),
+('জান্নাতুল ফেরদৌস', 'Jannatul Ferdous', 5, 8, 1, 'Female', '2010-04-16', 'মোঃ ফরিদুল ইসলাম', 'Md. Faridul Islam', '01911111129', 'photos/student_girl.png'),
+('মোঃ নাঈম হোসেন', 'Md. Naim Hossain', 5, 8, 2, 'Male', '2010-09-05', 'মোঃ দেলোয়ার হোসেন', 'Md. Delwar Hossain', '01911111130', 'photos/student_boy.png');
 
 -- Seed initial Notices
 INSERT INTO `notices` (`title_bn`, `title_en`, `content_bn`, `content_en`, `publish_date`, `is_published`) VALUES

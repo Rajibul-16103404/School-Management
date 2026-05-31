@@ -126,11 +126,6 @@ $active_dir = basename(dirname($_SERVER['SCRIPT_NAME']));
                         <i class="fa-solid fa-globe"></i> মূল ওয়েবসাইট
                     </a>
                 </li>
-                <li class="logout-link">
-                    <a href="<?php echo BASE_URL; ?>/admin/logout.php">
-                        <i class="fa-solid fa-right-from-bracket"></i> লগআউট
-                    </a>
-                </li>
             </ul>
         </nav>
     </aside>
@@ -144,7 +139,7 @@ $active_dir = basename(dirname($_SERVER['SCRIPT_NAME']));
             </button>
             <div class="topbar-right">
                 <span class="date-display"><i class="fa fa-calendar-alt"></i> <?php echo date('d M, Y'); ?></span>
-                <a href="<?php echo BASE_URL; ?>/admin/logout.php" class="btn-logout" title="লগআউট"><i class="fa fa-power-off"></i></a>
+                <a href="<?php echo BASE_URL; ?>/admin/logout.php" class="btn-logout" title="লগআউট" onclick="return confirm('আপনি কি নিশ্চিতভাবে লগআউট করতে চান?');"><i class="fa fa-power-off"></i></a>
             </div>
         </header>
 
