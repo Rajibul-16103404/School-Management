@@ -1,4 +1,6 @@
 <?php
+// Start output buffering to prevent "headers already sent" errors
+ob_start();
 /**
  * Global Configuration File
  * School Management System
