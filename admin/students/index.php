@@ -97,7 +97,7 @@ try {
     <span><i class="fa-solid fa-graduation-cap"></i> শিক্ষার্থী তালিকা (Student Registry)</span>
     <div style="display:flex; gap:10px;">
         <button id="exportCsvBtn" data-table-id="studentsTable" data-filename="students_list.csv" class="btn-admin btn-accent"><i class="fa fa-file-csv"></i> CSV এক্সপোর্ট</button>
-        <a href="add.php" class="btn-admin btn-primary"><i class="fa fa-user-plus"></i> নতুন শিক্ষার্থী</a>
+        <a href="add" class="btn-admin btn-primary"><i class="fa fa-user-plus"></i> নতুন শিক্ষার্থী</a>
     </div>
 </div>
 
@@ -179,8 +179,8 @@ try {
                             <td><?php echo escape($student['guardian_name_bn']); ?></td>
                             <td style="font-family: var(--font-en);"><?php echo escape($student['mobile']); ?></td>
                             <td class="actions-cell">
-                                <a href="edit.php?id=<?php echo $student['id']; ?>" class="btn-action edit" title="সম্পাদনা"><i class="fa fa-edit"></i></a>
-                                <a href="delete.php?id=<?php echo $student['id']; ?>" class="btn-action delete" title="মুছে ফেলুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই শিক্ষার্থীর প্রোফাইলটি মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
+                                <a href="edit?id=<?php echo $student['id']; ?>" class="btn-action edit" title="সম্পাদনা"><i class="fa fa-edit"></i></a>
+                                <a href="delete?id=<?php echo $student['id']; ?>" class="btn-action delete" title="মুছে ফেলুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই শিক্ষার্থীর প্রোফাইলটি মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

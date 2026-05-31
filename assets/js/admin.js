@@ -121,4 +121,78 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.removeChild(link);
         });
     }
+
+    // Custom Confirmation Modal Integration
+    const confirmModal = document.getElementById('customConfirmModal');
+    const confirmMessage = document.getElementById('customConfirmMessage');
+    const confirmCancelBtn = document.getElementById('customConfirmCancelBtn');
+    const confirmOkBtn = document.getElementById('customConfirmOkBtn');
+    
+    let confirmCallback = null;
+
+    function showCustomConfirm(message, callback) {
+        if (!confirmModal) return;
+        confirmMessage.textContent = message;
+        confirmCallback = callback;
+        confirmModal.style.display = 'flex';
+    }
+
+    if (confirmModal && confirmCancelBtn && confirmOkBtn) {
+        confirmCancelBtn.addEventListener('click', () => {
+            confirmModal.style.display = 'none';
+            confirmCallback = null;
+        });
+        
+        confirmOkBtn.addEventListener('click', () => {
+            confirmModal.style.display = 'none';
+            if (confirmCallback) {
+                confirmCallback();
+            }
+        });
+
+        // Intercept all elements using confirm()
+        const interceptConfirms = () => {
+            const confirmElements = document.querySelectorAll('[onclick*="confirm"]');
+            confirmElements.forEach(elem => {
+                const onclickAttr = elem.getAttribute('onclick');
+                if (onclickAttr) {
+                    const match = onclickAttr.match(/confirm\(['"](.+?)['"]\)/);
+                    const message = match ? match[1] : "আপনি কি নিশ্চিত?";
+                    
+                    // Remove inline click handler
+                    elem.removeAttribute('onclick');
+                    
+                    elem.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        showCustomConfirm(message, () => {
+                            if (elem.tagName === 'A' && elem.getAttribute('href')) {
+                                window.location.href = elem.getAttribute('href');
+                            } else if (elem.getAttribute('type') === 'submit' || elem.tagName === 'BUTTON') {
+                                const form = elem.closest('form');
+                                if (form) {
+                                    if (elem.getAttribute('name')) {
+                                        const hiddenInput = document.createElement('input');
+                                        hiddenInput.type = 'hidden';
+                                        hiddenInput.name = elem.getAttribute('name');
+                                        hiddenInput.value = elem.getAttribute('value') || '1';
+                                        form.appendChild(hiddenInput);
+                                    }
+                                    form.submit();
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+        };
+
+        // Run interception immediately
+        interceptConfirms();
+
+        // Also run it periodically/dynamically in case elements are added or changed
+        const observer = new MutationObserver(() => {
+            interceptConfirms();
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
 });

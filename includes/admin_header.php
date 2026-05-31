@@ -68,37 +68,37 @@ $active_dir = basename(dirname($_SERVER['SCRIPT_NAME']));
             <ul>
                 <li class="<?php echo ($active_script === 'index.php' && $active_dir === 'admin') ? 'active' : ''; ?>">
                     <a href="<?php echo BASE_URL; ?>/admin">
-                        <i class="fa-solid fa-gauge"></i> ড্যাশবোর্ড
+                        <i class="fa-solid fa-gauge"></i> <span>ড্যাশবোর্ড</span>
                     </a>
                 </li>
                 <li class="<?php echo ($active_dir === 'students') ? 'active' : ''; ?>">
                     <a href="<?php echo BASE_URL; ?>/admin/students">
-                        <i class="fa-solid fa-graduation-cap"></i> শিক্ষার্থী ব্যবস্থাপনা
+                        <i class="fa-solid fa-graduation-cap"></i> <span>শিক্ষার্থী ব্যবস্থাপনা</span>
                     </a>
                 </li>
                 <li class="<?php echo ($active_dir === 'teachers') ? 'active' : ''; ?>">
                     <a href="<?php echo BASE_URL; ?>/admin/teachers">
-                        <i class="fa-solid fa-chalkboard-user"></i> শিক্ষক ও কর্মচারী
+                        <i class="fa-solid fa-chalkboard-user"></i> <span>শিক্ষক ও কর্মচারী</span>
                     </a>
                 </li>
                 <li class="<?php echo ($active_dir === 'classes') ? 'active' : ''; ?>">
                     <a href="<?php echo BASE_URL; ?>/admin/classes">
-                        <i class="fa-solid fa-school"></i> শ্রেণি ও শাখা
+                        <i class="fa-solid fa-school"></i> <span>শ্রেণি ও শাখা</span>
                     </a>
                 </li>
                 <li class="<?php echo ($active_dir === 'academic') ? 'active' : ''; ?>">
                     <a href="<?php echo BASE_URL; ?>/admin/academic">
-                        <i class="fa-solid fa-book-open"></i> পাঠদান ও নোটিশ
+                        <i class="fa-solid fa-book-open"></i> <span>পাঠদান ও নোটিশ</span>
                     </a>
                 </li>
                 <li class="<?php echo ($active_dir === 'committee') ? 'active' : ''; ?>">
                     <a href="<?php echo BASE_URL; ?>/admin/committee">
-                        <i class="fa-solid fa-users-gear"></i> ব্যবস্থাপনা কমিটি
+                        <i class="fa-solid fa-users-gear"></i> <span>ব্যবস্থাপনা কমিটি</span>
                     </a>
                 </li>
                 <li class="<?php echo ($active_dir === 'mpo') ? 'active' : ''; ?>">
                     <a href="<?php echo BASE_URL; ?>/admin/mpo">
-                        <i class="fa-solid fa-file-invoice-dollar"></i> এমপিও তথ্য
+                        <i class="fa-solid fa-file-invoice-dollar"></i> <span>এমপিও তথ্য</span>
                     </a>
                 </li>
                 
@@ -106,7 +106,7 @@ $active_dir = basename(dirname($_SERVER['SCRIPT_NAME']));
                 <?php if ($user_role === 'superadmin' || $user_role === 'headteacher'): ?>
                     <li class="<?php echo ($active_dir === 'settings') ? 'active' : ''; ?>">
                         <a href="<?php echo BASE_URL; ?>/admin/settings">
-                            <i class="fa-solid fa-gears"></i> প্রতিষ্ঠান পরিচিতি
+                            <i class="fa-solid fa-gears"></i> <span>প্রতিষ্ঠান পরিচিতি</span>
                         </a>
                     </li>
                 <?php endif; ?>
@@ -115,7 +115,7 @@ $active_dir = basename(dirname($_SERVER['SCRIPT_NAME']));
                 <?php if ($user_role === 'superadmin'): ?>
                     <li class="<?php echo ($active_dir === 'users') ? 'active' : ''; ?>">
                         <a href="<?php echo BASE_URL; ?>/admin/users">
-                            <i class="fa-solid fa-user-group"></i> অ্যাডমিন ইউজার্স
+                            <i class="fa-solid fa-user-group"></i> <span>অ্যাডমিন ইউজার্স</span>
                         </a>
                     </li>
                 <?php endif; ?>
@@ -123,7 +123,7 @@ $active_dir = basename(dirname($_SERVER['SCRIPT_NAME']));
                 <li class="menu-divider"></li>
                 <li>
                     <a href="<?php echo BASE_URL; ?>/" target="_blank">
-                        <i class="fa-solid fa-globe"></i> মূল ওয়েবসাইট
+                        <i class="fa-solid fa-globe"></i> <span>মূল ওয়েবসাইট</span>
                     </a>
                 </li>
             </ul>

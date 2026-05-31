@@ -29,7 +29,7 @@ try {
 
 <div class="page-title">
     <span><i class="fa-solid fa-chalkboard-user"></i> শিক্ষক ও কর্মচারী তালিকা</span>
-    <a href="add.php" class="btn-admin btn-primary"><i class="fa fa-user-plus"></i> নতুন শিক্ষক/স্টাফ যুক্ত করুন</a>
+    <a href="add" class="btn-admin btn-primary"><i class="fa fa-user-plus"></i> নতুন শিক্ষক/স্টাফ যুক্ত করুন</a>
 </div>
 
 <!-- Type Filter Toggle -->
@@ -98,8 +98,8 @@ try {
                             <td style="font-family: var(--font-en);"><?php echo format_date($m['joining_date']); ?></td>
                             <td style="font-family: var(--font-en);"><?php echo escape($m['phone'] ?: '-'); ?></td>
                             <td class="actions-cell">
-                                <a href="edit.php?id=<?php echo $m['id']; ?>" class="btn-action edit" title="সম্পাদনা"><i class="fa fa-edit"></i></a>
-                                <a href="delete.php?id=<?php echo $m['id']; ?>" class="btn-action delete" title="মুছে ফেলুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই শিক্ষক/স্টাফ প্রোফাইলটি মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
+                                <a href="edit?id=<?php echo $m['id']; ?>" class="btn-action edit" title="সম্পাদনা"><i class="fa fa-edit"></i></a>
+                                <a href="delete?id=<?php echo $m['id']; ?>" class="btn-action delete" title="মুছে ফেলুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই শিক্ষক/স্টাফ প্রোফাইলটি মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

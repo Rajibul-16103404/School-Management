@@ -24,7 +24,7 @@ $role_names = [
 
 <div class="page-title">
     <span><i class="fa-solid fa-user-group"></i> অ্যাডমিন অ্যাকাউন্টস (System Users)</span>
-    <a href="add.php" class="btn-admin btn-primary"><i class="fa fa-user-plus"></i> নতুন অ্যাকাউন্ট তৈরি করুন</a>
+    <a href="add" class="btn-admin btn-primary"><i class="fa fa-user-plus"></i> নতুন অ্যাকাউন্ট তৈরি করুন</a>
 </div>
 
 <div class="admin-card">
@@ -61,9 +61,9 @@ $role_names = [
                             <td style="font-family: var(--font-en);"><?php echo escape($user['email'] ?: '-'); ?></td>
                             <td style="font-family: var(--font-en); font-size:12px; color: var(--text-muted);"><?php echo format_date($user['created_at']); ?></td>
                             <td class="actions-cell">
-                                <a href="edit.php?id=<?php echo $user['id']; ?>" class="btn-action edit" title="সম্পাদনা"><i class="fa fa-edit"></i></a>
+                                <a href="edit?id=<?php echo $user['id']; ?>" class="btn-action edit" title="সম্পাদনা"><i class="fa fa-edit"></i></a>
                                 <?php if ((int)$user['id'] !== (int)$_SESSION['user_id']): ?>
-                                    <a href="delete.php?id=<?php echo $user['id']; ?>" class="btn-action delete" title="মুছে ফেলুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই ইউজার অ্যাকাউন্টটি মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
+                                    <a href="delete?id=<?php echo $user['id']; ?>" class="btn-action delete" title="মুছে ফেলুন" onclick="return confirm('আপনি কি নিশ্চিতভাবে এই ইউজার অ্যাকাউন্টটি মুছে ফেলতে চান?');"><i class="fa fa-trash"></i></a>
                                 <?php else: ?>
                                     <span style="color:var(--text-muted); font-size:11px; font-style:italic;">নিজে (Self)</span>
                                 <?php endif; ?>

@@ -85,10 +85,10 @@ if ($pdo) {
         <span class="admin-card-title"><i class="fa fa-wand-magic-sparkles" style="color: var(--accent);"></i> কুইক অ্যাকশন (Quick Actions)</span>
     </div>
     <div style="display:flex; gap:12px; flex-wrap:wrap;">
-        <a href="<?php echo BASE_URL; ?>/admin/students/add.php" class="btn-admin btn-primary"><i class="fa fa-user-plus"></i> শিক্ষার্থী যুক্ত করুন</a>
-        <a href="<?php echo BASE_URL; ?>/admin/teachers/add.php" class="btn-admin btn-accent"><i class="fa fa-user-tie"></i> শিক্ষক/স্টাফ যুক্ত করুন</a>
-        <a href="<?php echo BASE_URL; ?>/admin/academic/add_notice.php" class="btn-admin btn-secondary" style="background-color: var(--info);"><i class="fa fa-plus-circle"></i> নোটিশ প্রকাশ করুন</a>
-        <a href="<?php echo BASE_URL; ?>/admin/classes/index.php" class="btn-admin btn-secondary" style="background-color: var(--primary);"><i class="fa fa-layer-group"></i> শ্রেণি/শাখা ব্যবস্থাপনা</a>
+        <a href="<?php echo BASE_URL; ?>/admin/students/add" class="btn-admin btn-primary"><i class="fa fa-user-plus"></i> শিক্ষার্থী যুক্ত করুন</a>
+        <a href="<?php echo BASE_URL; ?>/admin/teachers/add" class="btn-admin btn-accent"><i class="fa fa-user-tie"></i> শিক্ষক/স্টাফ যুক্ত করুন</a>
+        <a href="<?php echo BASE_URL; ?>/admin/academic/add_notice" class="btn-admin btn-secondary" style="background-color: var(--info);"><i class="fa fa-plus-circle"></i> নোটিশ প্রকাশ করুন</a>
+        <a href="<?php echo BASE_URL; ?>/admin/classes" class="btn-admin btn-secondary" style="background-color: var(--primary);"><i class="fa fa-layer-group"></i> শ্রেণি/শাখা ব্যবস্থাপনা</a>
     </div>
 </div>
 
