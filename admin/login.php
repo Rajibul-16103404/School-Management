@@ -246,6 +246,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             <div class="alert alert-warning">🕒 নিষ্ক্রিয়তার কারণে সেশন শেষ হয়েছে। দয়া করে পুনরায় লগইন করুন।</div>
         <?php endif; ?>
 
+        <div style="background: rgba(212, 175, 55, 0.08); border: 1px dashed var(--accent); padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; color: #fde047; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s;" onclick="autofillCredentials()" title="ক্লিক করলে ফিল্ডগুলো স্বয়ংক্রিয়ভাবে পূরণ হবে">
+            <div>
+                <strong style="display: block; margin-bottom: 2px;">🔑 ডেমো লগইন তথ্য (Demo Credentials):</strong>
+                ইউজারনেম: <strong style="color:white;">admin</strong> &nbsp;|&nbsp; পাসওয়ার্ড: <strong style="color:white;">Admin@123456</strong>
+            </div>
+            <span style="font-size: 10px; background: var(--accent); color: black; padding: 3px 6px; border-radius: 4px; font-weight: bold; text-transform: uppercase; white-space: nowrap;">ক্লিক করুন</span>
+        </div>
+
         <form method="POST">
             <?php echo csrf_input(); ?>
             <div class="form-group">
@@ -271,6 +279,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         </div>
     </div>
 </div>
+
+<script>
+function autofillCredentials() {
+    document.getElementById('username').value = 'admin';
+    document.getElementById('password').value = 'Admin@123456';
+}
+</script>
 
 </body>
 </html>
